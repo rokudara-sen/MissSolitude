@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using MissSolitude.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,8 +10,9 @@ builder.Services.AddSwaggerGen();
 
 // --------------------- MY CODE ------------------------------
 
-
-
+builder.Services.AddControllers();
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseNpgsql("Host=localhost;Database=$POSTGRES_DB;Username=$POSTGRES_USER;Password=$POSTGRES_PASSWORD;"));
 
 // ------------------------------------------------------------
 
@@ -22,5 +26,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// --------------------- MY CODE ------------------------------
+
+app.MapControllers();
+
+// ------------------------------------------------------------
+
 app.Run();
 
