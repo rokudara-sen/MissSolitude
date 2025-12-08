@@ -1,6 +1,14 @@
-﻿namespace MissSolitude.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore;
+using MissSolitude.Domain;
 
-public class DatabaseContext
+namespace MissSolitude.Infrastructure;
+
+public class DatabaseContext : DbContext
 {
+    public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
+    {
+        
+    }
     
+    DbSet<User> Users { get; set; }
 }
