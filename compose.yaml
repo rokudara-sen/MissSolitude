@@ -1,0 +1,7 @@
+﻿services:
+  misssolitude.api:
+    image: misssolitude.api
+    build:
+      context: .
+      dockerfile: MissSolitude.API/Dockerfile
+

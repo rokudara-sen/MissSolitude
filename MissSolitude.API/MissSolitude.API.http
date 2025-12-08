@@ -1,0 +1,6 @@
+@MissSolitude.API_HostAddress = http://localhost:5016
+
+GET {{MissSolitude.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
