@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\MissSolitude.Contracts\MissSolitude.Contracts.csproj" />
       <ProjectReference Include="..\MissSolitude.Infrastructure\MissSolitude.Infrastructure.csproj" />
     </ItemGroup>
 
