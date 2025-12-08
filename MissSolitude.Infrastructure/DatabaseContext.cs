@@ -10,5 +10,5 @@ public class DatabaseContext : DbContext
         
     }
     
-    DbSet<User> Users { get; set; }
+    public DbSet<User> Users { get; set; }
 }
