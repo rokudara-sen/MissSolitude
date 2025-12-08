@@ -26,7 +26,8 @@ public class UserController : ControllerBase
     public IActionResult GetById(Guid id)
     {
         var user = _databaseContext.Users.Find(id);
-        if (user is null) return NotFound();
+        if (user is null)
+            return NotFound();
 
         return Ok(new UserDto(user.Id, user.Username, user.Email));
     }
@@ -47,5 +48,18 @@ public class UserController : ControllerBase
         var dataTransferObject = new UserDto(newUser.Id, newUser.Username, newUser.Email);
 
         return CreatedAtAction(nameof(GetById), new { id = newUser.Id }, dataTransferObject);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public IActionResult RemoveUser(Guid id)
+    {
+        var user = _databaseContext.Users.Find(id);
+        if (user is null)
+            return NotFound();
+
+        _databaseContext.Users.Remove(user);
+        _databaseContext.SaveChanges();
+        
+        return NoContent();
     }
 }
