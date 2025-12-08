@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Data;
+using Microsoft.AspNetCore.Mvc;
+using MissSolitude.Application;
 using MissSolitude.Contracts;
 using MissSolitude.Domain;
 using MissSolitude.Infrastructure;
@@ -10,10 +12,12 @@ namespace MissSolitude.API;
 public class UserController : ControllerBase
 {
     private readonly DatabaseContext _databaseContext;
+    private readonly IUserService _userService;
 
-    public UserController(DatabaseContext databaseContext)
+    public UserController(DatabaseContext databaseContext, IUserService userService)
     {
         _databaseContext = databaseContext;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -33,21 +37,26 @@ public class UserController : ControllerBase
     }
     
     [HttpPost]
-    public IActionResult AddUser(CreateUserRequest user)
+    public async Task<IActionResult> AddUser([FromBody] CreateUserRequest user)
     {
-        var userExistsAlready =
-            _databaseContext.Users.Any(databaseContextUser => databaseContextUser.Email == user.Email);
-        if (userExistsAlready)
-            return Conflict("User already exists.");
-
-        var newUser = new User(Guid.NewGuid(), user.Username, user.Password, user.Email);
-
-        _databaseContext.Users.Add(newUser);
-        _databaseContext.SaveChanges();
-
-        var dataTransferObject = new UserDto(newUser.Id, newUser.Username, newUser.Email);
-
-        return CreatedAtAction(nameof(GetById), new { id = newUser.Id }, dataTransferObject);
+        try
+        {
+            var command = new CreateUserCommand(
+                Username: user.Username,
+                Email: user.Email,
+                Password: user.Password
+            );
+            
+            var result = await _userService.CreateAsync(command);
+            
+            var dataTransferObject = new UserDto(result.Id, result.Username, result.Email);
+            
+            return CreatedAtAction(nameof(GetById), new { id = dataTransferObject.Id }, dataTransferObject);
+        }
+        catch (DuplicateNameException exception)
+        {
+            return Conflict(exception.Message);
+        }
     }
 
     [HttpDelete("{id:guid}")]
