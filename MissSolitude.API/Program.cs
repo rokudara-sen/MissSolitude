@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseNpgsql("Host=localhost;Database=$POSTGRES_DB;Username=$POSTGRES_USER;Password=$POSTGRES_PASSWORD;"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 // ------------------------------------------------------------
 
