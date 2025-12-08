@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MissSolitude.Application;
 using MissSolitude.Contracts;
-using MissSolitude.Domain;
 using MissSolitude.Infrastructure;
 
 namespace MissSolitude.API;
