@@ -6,6 +6,11 @@ public sealed class User
     public string Username { get; set; }
     public string Password { get; private set; }
     public EmailAddress Email { get; private set; }
+
+    public User()
+    {
+        
+    }
     
     public User(Guid id, string username, string password, EmailAddress email)
     {
