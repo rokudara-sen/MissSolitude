@@ -5,3 +5,21 @@
       context: .
       dockerfile: MissSolitude.API/Dockerfile
 
+  postgresDatabase:
+    image: postgres:16
+    container_name: postgresDatabase
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: MissSolitude
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresData:/var/lib/postgresql/data
+  
+
+volumes:
+  postgresData:
+
+    
