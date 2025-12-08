@@ -3,8 +3,8 @@
 public sealed class User
 {
     public Guid Id { get; set; }
-    public string Username { get; set; }
-    public string Password { get; private set; }
+    public string Username { get; set; } = default!;
+    public string PasswordHash { get; private set; } = default!;
     public EmailAddress Email { get; private set; }
 
     public User()
@@ -12,11 +12,11 @@ public sealed class User
         
     }
     
-    public User(Guid id, string username, string password, EmailAddress email)
+    public User(Guid id, string username, string passwordHash, EmailAddress email)
     {
         Id = id;
         Username = username;
-        Password = password;
+        PasswordHash = passwordHash;
         Email = email;
     }
 

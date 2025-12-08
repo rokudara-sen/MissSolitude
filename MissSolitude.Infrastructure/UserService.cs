@@ -28,6 +28,6 @@ public class UserService : IUserService
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
 
-        return new CreateUserResult(user.Id, user.Username, user.Password, user.Email);
+        return new CreateUserResult(user.Id, user.Username, user.PasswordHash, user.Email);
     }
 }
