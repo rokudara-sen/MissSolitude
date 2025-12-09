@@ -4,7 +4,7 @@ using MissSolitude.Application;
 using MissSolitude.Contracts;
 using MissSolitude.Infrastructure;
 
-namespace MissSolitude.API;
+namespace MissSolitude.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
