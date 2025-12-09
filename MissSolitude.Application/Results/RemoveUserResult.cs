@@ -1,3 +1,3 @@
-﻿namespace MissSolitude.Application;
+﻿namespace MissSolitude.Application.Results;
 
 public sealed record RemoveUserResult(Guid Id);

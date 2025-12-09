@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MissSolitude.Application;
 using MissSolitude.Application.Commands;
+using MissSolitude.Application.Results;
 using MissSolitude.Application.Services;
 using MissSolitude.Domain;
 using MissSolitude.Domain.Entities;

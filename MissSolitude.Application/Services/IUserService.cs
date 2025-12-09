@@ -1,4 +1,5 @@
 ﻿using MissSolitude.Application.Commands;
+using MissSolitude.Application.Results;
 
 namespace MissSolitude.Application.Services;
 
