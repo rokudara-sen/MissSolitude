@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MissSolitude.Application;
 using MissSolitude.Application.Commands;
 using MissSolitude.Application.Services;
+using MissSolitude.Application.Services.Interfaces;
 using MissSolitude.Contracts;
 using MissSolitude.Infrastructure;
 

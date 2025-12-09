@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MissSolitude.Application;
 using MissSolitude.Application.Services;
+using MissSolitude.Application.Services.Interfaces;
 using MissSolitude.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,4 +1,4 @@
-﻿namespace MissSolitude.Application;
+﻿namespace MissSolitude.Application.Services.Interfaces;
 
 public interface IPasswordHasher
 {

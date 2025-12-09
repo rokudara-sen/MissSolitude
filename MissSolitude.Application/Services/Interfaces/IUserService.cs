@@ -1,7 +1,7 @@
 ﻿using MissSolitude.Application.Commands;
 using MissSolitude.Application.Results;
 
-namespace MissSolitude.Application.Services;
+namespace MissSolitude.Application.Services.Interfaces;
 
 public interface IUserService
 {

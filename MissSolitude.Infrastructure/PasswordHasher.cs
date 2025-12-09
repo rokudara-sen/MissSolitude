@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MissSolitude.Application;
+using MissSolitude.Application.Services.Interfaces;
 
 namespace MissSolitude.Infrastructure;
 
