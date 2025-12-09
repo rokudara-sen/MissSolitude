@@ -2,6 +2,7 @@
 using MissSolitude.Application;
 using MissSolitude.Application.Services;
 using MissSolitude.Domain;
+using MissSolitude.Domain.Entities;
 
 namespace MissSolitude.Infrastructure;
 
