@@ -1,11 +1,7 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.Mvc;
-using MissSolitude.Application;
+﻿using Microsoft.AspNetCore.Mvc;
 using MissSolitude.Application.Commands;
-using MissSolitude.Application.Services;
-using MissSolitude.Application.Services.Interfaces;
-using MissSolitude.Contracts;
-using MissSolitude.Infrastructure;
+using MissSolitude.Application.Results;
+using MissSolitude.Application.UseCases.User;
 
 namespace MissSolitude.API.Controllers;
 
@@ -13,68 +9,43 @@ namespace MissSolitude.API.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly DatabaseContext _databaseContext;
-    private readonly IUserService _userService;
+    private readonly CreateUserUseCase _createUserUseCase;
+    private readonly ReadUserUseCase _readUserUseCase;
+    private readonly UpdateUserUseCase _updateUserUseCase;
+    private readonly DeleteUserUseCase _deleteUserUseCase;
 
-    public UserController(DatabaseContext databaseContext, IUserService userService)
+    public UserController(CreateUserUseCase createUserUseCase, ReadUserUseCase readUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase)
     {
-        _databaseContext = databaseContext;
-        _userService = userService;
+        _createUserUseCase = createUserUseCase;
+        _readUserUseCase = readUserUseCase;
+        _updateUserUseCase = updateUserUseCase;
+        _deleteUserUseCase = deleteUserUseCase;
     }
 
-    [HttpGet]
-    public IActionResult GetAll()
+    [HttpPost]
+    public Task<CreateUserResult> CreateUserAsync([FromBody] CreateUserCommand request,
+        CancellationToken cancellationToken)
     {
-        return Ok(_databaseContext.Users.Select(user => new UserDto(user.Id, user.Username, user.Email)));
-    }
-
-    [HttpGet("{id:guid}")]
-    public IActionResult GetById(Guid id)
-    {
-        var user = _databaseContext.Users.Find(id);
-        if (user is null)
-            return NotFound();
-
-        return Ok(new UserDto(user.Id, user.Username, user.Email));
+        return _createUserUseCase.ExecuteAsync(request, cancellationToken);
     }
     
-    [HttpPost]
-    public async Task<IActionResult> AddUserAsync([FromBody] CreateUserRequest user, CancellationToken cancellationToken)
+    [HttpGet("{id:guid}")]
+    public Task<ReadUserResult> ReadUserAsync(Guid id, CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = new CreateUserCommand(
-                Username: user.Username,
-                Email: user.Email,
-                Password: user.Password
-            );
-            
-            var result = await _userService.CreateAsync(command, cancellationToken);
-            
-            var dataTransferObject = new UserDto(result.Id, result.Username, result.Email);
-            
-            return CreatedAtAction(nameof(GetById), new { id = dataTransferObject.Id }, dataTransferObject);
-        }
-        catch (DuplicateNameException exception)
-        {
-            return Conflict(exception.Message);
-        }
+        return _readUserUseCase.ExecuteAsync(id, cancellationToken);
+    }
+
+    [HttpPut]
+    public Task<UpdateUserResult> UpdateUserAsync([FromBody] UpdateUserCommand request,
+        CancellationToken cancellationToken)
+    {
+        return _updateUserUseCase.ExecuteAsync(request, cancellationToken);
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteUserAsync(Guid id, CancellationToken cancellationToken)
+    public Task DeleteUserAsync(Guid id,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var command = new DeleteUserCommand(id);
-
-            await _userService.DeleteAsync(command, cancellationToken);
-
-            return NoContent();
-        }
-        catch (KeyNotFoundException exception)
-        {
-            return NotFound(exception.Message);
-        }
+        return _deleteUserUseCase.ExecuteAsync(id, cancellationToken);
     }
 }

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using MissSolitude.Application;
-using MissSolitude.Application.Services;
-using MissSolitude.Application.Services.Interfaces;
+using MissSolitude.Application.Interfaces.Functions;
+using MissSolitude.Application.UseCases.User;
 using MissSolitude.Infrastructure;
 using MissSolitude.Infrastructure.Services;
 
@@ -18,8 +17,11 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddInfrastructure();
+builder.Services.AddScoped<CreateUserUseCase>();
+builder.Services.AddScoped<ReadUserUseCase>();
+builder.Services.AddScoped<UpdateUserUseCase>();
+builder.Services.AddScoped<DeleteUserUseCase>();
 
 // ------------------------------------------------------------
 

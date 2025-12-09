@@ -6,8 +6,8 @@ public sealed class User
 {
     public Guid Id { get; set; }
     public string Username { get; set; } = default!;
-    public string PasswordHash { get; private set; } = default!;
-    public EmailAddress Email { get; private set; }
+    public string PasswordHash { get; set; } = default!;
+    public EmailAddress Email { get; set; }
 
     public User()
     {
