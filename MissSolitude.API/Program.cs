@@ -3,6 +3,7 @@ using MissSolitude.Application;
 using MissSolitude.Application.Services;
 using MissSolitude.Application.Services.Interfaces;
 using MissSolitude.Infrastructure;
+using MissSolitude.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
