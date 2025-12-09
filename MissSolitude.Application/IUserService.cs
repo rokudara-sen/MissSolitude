@@ -2,5 +2,6 @@
 
 public interface IUserService
 {
-    Task<CreateUserResult> CreateAsync(CreateUserCommand request);
+    Task<CreateUserResult> CreateAsync(CreateUserCommand request, CancellationToken cancellationToken);
+    Task<RemoveUserResult> RemoveAsync(RemoveUserCommand request, CancellationToken cancellationToken);
 }
