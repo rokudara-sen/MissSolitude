@@ -62,13 +62,13 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> RemoveUserAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteUserAsync(Guid id, CancellationToken cancellationToken)
     {
         try
         {
-            var command = new RemoveUserCommand(id);
+            var command = new DeleteUserCommand(id);
 
-            await _userService.RemoveAsync(command, cancellationToken);
+            await _userService.DeleteAsync(command, cancellationToken);
 
             return NoContent();
         }

@@ -40,7 +40,7 @@ public class UserService : IUserService
         return new CreateUserResult(user.Id, user.Username, user.Email);
     }
     
-    public async Task<RemoveUserResult> RemoveAsync(RemoveUserCommand request, CancellationToken cancellationToken)
+    public async Task<DeleteUserResult> DeleteAsync(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _databaseContext.Users.FindAsync([request.Id], cancellationToken);
 
@@ -50,6 +50,6 @@ public class UserService : IUserService
         _databaseContext.Users.Remove(existingUser);
         await _databaseContext.SaveChangesAsync(cancellationToken);
 
-        return new RemoveUserResult(existingUser.Id);
+        return new DeleteUserResult(existingUser.Id);
     }
 }

@@ -6,5 +6,5 @@ namespace MissSolitude.Application.Services.Interfaces;
 public interface IUserService
 {
     Task<CreateUserResult> CreateAsync(CreateUserCommand request, CancellationToken cancellationToken);
-    Task<RemoveUserResult> RemoveAsync(RemoveUserCommand request, CancellationToken cancellationToken);
+    Task<DeleteUserResult> DeleteAsync(DeleteUserCommand request, CancellationToken cancellationToken);
 }
