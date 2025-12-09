@@ -1,4 +1,6 @@
-﻿namespace MissSolitude.Application.Services;
+﻿using MissSolitude.Application.Commands;
+
+namespace MissSolitude.Application.Services;
 
 public interface IUserService
 {
