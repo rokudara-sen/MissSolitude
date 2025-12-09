@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MissSolitude.Application;
+using MissSolitude.Application.Services;
 using MissSolitude.Domain;
 
 namespace MissSolitude.Infrastructure;

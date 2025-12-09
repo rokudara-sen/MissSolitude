@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using MissSolitude.Application;
+using MissSolitude.Application.Services;
 using MissSolitude.Contracts;
 using MissSolitude.Infrastructure;
 
