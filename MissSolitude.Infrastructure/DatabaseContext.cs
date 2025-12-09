@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MissSolitude.Domain;
 using MissSolitude.Domain.Entities;
+using MissSolitude.Domain.ValueObjects;
 
 namespace MissSolitude.Infrastructure;
 

@@ -1,4 +1,6 @@
-﻿namespace MissSolitude.Domain.Entities;
+﻿using MissSolitude.Domain.ValueObjects;
+
+namespace MissSolitude.Domain.Entities;
 
 public sealed class User
 {

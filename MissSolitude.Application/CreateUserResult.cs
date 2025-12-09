@@ -1,4 +1,5 @@
 ﻿using MissSolitude.Domain;
+using MissSolitude.Domain.ValueObjects;
 
 namespace MissSolitude.Application;
 

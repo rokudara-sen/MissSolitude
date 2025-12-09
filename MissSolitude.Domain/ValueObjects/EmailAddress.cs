@@ -1,4 +1,4 @@
-﻿namespace MissSolitude.Domain;
+﻿namespace MissSolitude.Domain.ValueObjects;
 
 public readonly record struct EmailAddress(string Value)
 {
