@@ -36,7 +36,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> AddUser([FromBody] CreateUserRequest user)
+    public async Task<IActionResult> AddUserAsync([FromBody] CreateUserRequest user, CancellationToken cancellationToken)
     {
         try
         {
@@ -46,7 +46,7 @@ public class UserController : ControllerBase
                 Password: user.Password
             );
             
-            var result = await _userService.CreateAsync(command);
+            var result = await _userService.CreateAsync(command, cancellationToken);
             
             var dataTransferObject = new UserDto(result.Id, result.Username, result.Email);
             
@@ -59,15 +59,19 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public IActionResult RemoveUser(Guid id)
+    public async Task<IActionResult> RemoveUserAsync(Guid id, CancellationToken cancellationToken)
     {
-        var user = _databaseContext.Users.Find(id);
-        if (user is null)
-            return NotFound();
+        try
+        {
+            var command = new RemoveUserCommand(id);
 
-        _databaseContext.Users.Remove(user);
-        _databaseContext.SaveChanges();
-        
-        return NoContent();
+            await _userService.RemoveAsync(command, cancellationToken);
+
+            return NoContent();
+        }
+        catch (KeyNotFoundException exception)
+        {
+            return NotFound(exception.Message);
+        }
     }
 }
