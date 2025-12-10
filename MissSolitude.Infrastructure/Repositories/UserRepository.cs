@@ -31,7 +31,17 @@ public class UserRepository : IUserRepository
 
     public Task<User?> GetByEmailOrUsernameAsync(string identifier, CancellationToken cancellationToken)
     {
-        return _databaseContext.Users.SingleOrDefaultAsync(user => user.Email.Value == identifier || user.Username == identifier, cancellationToken);
+        if (identifier.Contains('@'))
+        {
+            var email = new EmailAddress(identifier);
+            return _databaseContext.Users.SingleOrDefaultAsync(
+                user => user.Username == identifier || user.Email == email,
+                cancellationToken);
+        }
+
+        return _databaseContext.Users.SingleOrDefaultAsync(
+            user => user.Username == identifier,
+            cancellationToken);
     }
 
     public Task AddAsync(User user, CancellationToken cancellationToken)

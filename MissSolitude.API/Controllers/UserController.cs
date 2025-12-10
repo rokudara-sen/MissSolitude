@@ -13,13 +13,15 @@ public class UserController : ControllerBase
     private readonly ReadUserUseCase _readUserUseCase;
     private readonly UpdateUserUseCase _updateUserUseCase;
     private readonly DeleteUserUseCase _deleteUserUseCase;
+    private readonly LogInUserUseCase _logInUserUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase, ReadUserUseCase readUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase)
+    public UserController(CreateUserUseCase createUserUseCase, ReadUserUseCase readUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, LogInUserUseCase logInUserUseCase)
     {
         _createUserUseCase = createUserUseCase;
         _readUserUseCase = readUserUseCase;
         _updateUserUseCase = updateUserUseCase;
         _deleteUserUseCase = deleteUserUseCase;
+        _logInUserUseCase = logInUserUseCase;
     }
 
     [HttpPost]
@@ -47,5 +49,12 @@ public class UserController : ControllerBase
         CancellationToken cancellationToken)
     {
         return _deleteUserUseCase.ExecuteAsync(id, cancellationToken);
+    }
+    
+    [HttpPost("login")]
+    public Task<LogInUserResult> LoginUserAsync([FromBody] LogInUserCommand request,
+        CancellationToken cancellationToken)
+    {
+        return _logInUserUseCase.LogInAsync(request, cancellationToken);
     }
 }

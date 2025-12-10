@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MissSolitude.Application.Interfaces.Functions;
 using MissSolitude.Application.UseCases.User;
 using MissSolitude.Infrastructure;
+using MissSolitude.Infrastructure.Auth;
 using MissSolitude.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 // --------------------- MY CODE ------------------------------
 
+builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection("Tokens"));
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
@@ -22,6 +24,7 @@ builder.Services.AddScoped<CreateUserUseCase>();
 builder.Services.AddScoped<ReadUserUseCase>();
 builder.Services.AddScoped<UpdateUserUseCase>();
 builder.Services.AddScoped<DeleteUserUseCase>();
+builder.Services.AddScoped<LogInUserUseCase>();
 
 // ------------------------------------------------------------
 

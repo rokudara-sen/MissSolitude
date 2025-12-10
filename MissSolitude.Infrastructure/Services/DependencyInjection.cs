@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MissSolitude.Application.Interfaces.Functions;
 using MissSolitude.Application.Interfaces.Repositories;
+using MissSolitude.Infrastructure.Auth;
 using MissSolitude.Infrastructure.Repositories;
 
 namespace MissSolitude.Infrastructure.Services;
@@ -12,6 +13,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddSingleton<ITokenService, JWTTokenService>();
         return services;
     }
 }
