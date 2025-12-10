@@ -1,5 +1,4 @@
 ﻿using MissSolitude.Application.Commands;
-using MissSolitude.Domain.Entities;
 using MissSolitude.Application.Interfaces.Functions;
 using MissSolitude.Application.Interfaces.Repositories;
 using MissSolitude.Application.Results;
