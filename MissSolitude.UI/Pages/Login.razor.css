@@ -1,7 +1,4 @@
-﻿/* THEME: Deep Midnight
-   Fixed: Variables are scoped to .auth-layout to guarantee they apply.
-   Fixed: Background is applied to the wrapper, not body, to prevent white-on-white issues.
-*/
+﻿/* THEME: Deep Midnight */
 
 .auth-layout {
     /* Define variables LOCALLY to ensure they exist */
@@ -9,12 +6,11 @@
     --bg-card: #18181b;
     --bg-input: #27272a;
     --border-color: #3f3f46;
-
-    --primary: #6366f1; /* Indigo */
+    --primary: #6366f1;
     --primary-hover: #4f46e5;
-
     --text-white: #fafafa;
     --text-gray: #a1a1aa;
+    --error: #ef4444;
 
     /* Layout properties */
     min-height: 100vh;
@@ -24,13 +20,10 @@
     justify-content: center;
     padding: 1.5rem;
 
-    /* Force the dark background here */
     background-color: var(--bg-dark);
-    /* Subtle texture to make it less flat */
     background-image: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 40%),
     radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.1), transparent 40%);
 
-    /* Font reset */
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     color: var(--text-white);
 }
@@ -41,14 +34,9 @@
     max-width: 400px;
     padding: 2.5rem;
     border-radius: 1rem;
-
-    /* Solid dark background for reliability */
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
-
-    /* Strong shadow for pop */
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-
     animation: fadeIn 0.5s ease-out forwards;
 }
 
@@ -101,26 +89,59 @@
     z-index: 10;
 }
 
-.input {
+/* FIX: Targeted selectors to override global framework validation styles.
+   We explicitly target .valid and .invalid and use !important to force 
+   the dark background, preventing the "White Box" glitch.
+*/
+::deep input.input,
+::deep input.input.valid,
+::deep input.input.modified.valid,
+::deep input.input.modified.invalid {
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 3rem; /* Space for icon */
-    background-color: var(--bg-input);
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    background-color: var(--bg-input) !important;
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
-    color: var(--text-white);
+    color: var(--text-white) !important;
     font-size: 0.95rem;
     outline: none;
     transition: all 0.2s;
+    box-shadow: none !important;
 }
 
 .input::placeholder {
     color: #52525b;
 }
 
+/* Focus State */
 .input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-    background-color: #27272a; /* Keep dark on focus */
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+    background-color: #27272a !important;
+}
+
+/* Validation Specifics */
+.input.modified.invalid {
+    border-color: var(--error) !important;
+}
+
+/* Blazor Validation Messages */
+::deep .validation-message {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
+/* Validation Summary (Top of form) */
+::deep .validation-errors {
+    margin: 0 0 1.5rem 0;
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 0.5rem;
+    color: var(--error);
+    font-size: 0.9rem;
+    list-style: none;
 }
 
 /* CHECKBOX & LINKS */
@@ -185,16 +206,9 @@
     background-color: var(--primary-hover);
 }
 
-.btn-ghost {
-    background-color: transparent;
-    color: var(--text-gray);
-    border: 1px solid var(--border-color);
-    margin-top: 1rem;
-}
-
-.btn-ghost:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-white);
+.btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 .divider {
@@ -217,6 +231,24 @@
 
 .divider span {
     padding: 0 1rem;
+}
+
+/* Messages */
+.error {
+    color: var(--error);
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.success {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--text-white);
+    text-align: center;
 }
 
 @keyframes fadeIn {
