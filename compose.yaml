@@ -6,10 +6,17 @@
     container_name: misssolitude.api
     ports:
       - "8080:8080"
+      - "8443:8443"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8080
+
+      Kestrel__Endpoints__Http__Url: http://0.0.0.0:8080
+      Kestrel__Endpoints__Https__Url: https://0.0.0.0:8443
+      Kestrel__Certificates__Default__Path: /https/misssolitude.pfx
+      Kestrel__Certificates__Default__Password: ${ASPNETCORE_Kestrel__Certificates__Default__Password}
       ConnectionStrings__Default: Host=postgresDatabase;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    volumes:
+      - ./certificates:/https:ro
     depends_on:
       postgresDatabase:
         condition: service_healthy

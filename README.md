@@ -85,6 +85,23 @@ POSTGRES_DB=MissSolitude
 
 The API will be available on port `8080` by default.
 
+### Enabling HTTPS locally
+
+The API can also listen on `https://localhost:8443` when provided a certificate. Docker Compose is preconfigured to load a PFX from `./certificates/misssolitude.pfx` and pass the password via `ASPNETCORE_Kestrel__Certificates__Default__Password`.
+
+1. Generate a development certificate and export it to `./certificates/misssolitude.pfx`:
+   ```bash
+   mkdir -p certificates
+   dotnet dev-certs https --clean
+   dotnet dev-certs https -ep ./certificates/misssolitude.pfx -p "your-strong-password"
+   dotnet dev-certs https --trust
+   ```
+2. Add the password to your environment (or `.env`) before running Compose:
+   ```bash
+   export ASPNETCORE_Kestrel__Certificates__Default__Password="your-strong-password"
+   ```
+3. Start the stack and reach the API at `https://localhost:8443`.
+
 ## Database migrations
 
 Create new migrations from the solution root:
