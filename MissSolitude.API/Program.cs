@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MissSolitude.Application.Interfaces.Functions;
 using MissSolitude.Application.UseCases.User;
 using MissSolitude.Infrastructure;
 using MissSolitude.Infrastructure.Auth;
