@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MissSolitude.Application.Commands;
-using MissSolitude.Application.Results;
 using MissSolitude.Application.UseCases.User;
+using MissSolitude.Contracts;
 
 namespace MissSolitude.API.Controllers;
 
@@ -25,36 +25,80 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public Task<CreateUserResult> CreateUserAsync([FromBody] CreateUserCommand request,
+    public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserCommand request,
         CancellationToken cancellationToken)
     {
-        return _createUserUseCase.ExecuteAsync(request, cancellationToken);
+        try
+        {
+            var result = await _createUserUseCase.ExecuteAsync(request, cancellationToken);
+            var userDto = new UserDto(result.Id, result.Username, result.Email);
+            return CreatedAtRoute("GetUserById", new { id = userDto.Id }, userDto);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(exception.Message);
+        }
     }
     
-    [HttpGet("{id:guid}")]
-    public Task<ReadUserResult> ReadUserAsync(Guid id, CancellationToken cancellationToken)
+    [HttpGet("{id:guid}", Name = "GetUserById")]
+    public async Task<IActionResult> ReadUserAsync(Guid id, CancellationToken cancellationToken)
     {
-        return _readUserUseCase.ExecuteAsync(id, cancellationToken);
+        try
+        {
+            var result = await _readUserUseCase.ExecuteAsync(id, cancellationToken);
+            var userDto = new UserDto(result.Id, result.Username, result.Email);
+            return Ok(userDto);
+        }
+        catch (KeyNotFoundException exception)
+        {
+            return NotFound(exception.Message);
+        }
     }
 
-    [HttpPut]
-    public Task<UpdateUserResult> UpdateUserAsync([FromBody] UpdateUserCommand request,
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateUserAsync(Guid id, [FromBody] UpdateUserCommand request,
         CancellationToken cancellationToken)
     {
-        return _updateUserUseCase.ExecuteAsync(request, cancellationToken);
+        try
+        {
+            request = request with { Id = id };
+            var result = await _updateUserUseCase.ExecuteAsync(request, cancellationToken);
+            var userDto = new UserDto(result.Id, result.Username, result.Email);
+            return Ok(userDto);
+        }
+        catch (KeyNotFoundException exception)
+        {
+            return NotFound(exception.Message);
+        }
     }
 
     [HttpDelete("{id:guid}")]
-    public Task DeleteUserAsync(Guid id,
+    public async Task<IActionResult> DeleteUserAsync(Guid id,
         CancellationToken cancellationToken)
     {
-        return _deleteUserUseCase.ExecuteAsync(id, cancellationToken);
+        try
+        {
+            await _deleteUserUseCase.ExecuteAsync(id, cancellationToken);
+            return NoContent();
+        }
+        catch (KeyNotFoundException exception)
+        {
+            return NotFound(exception.Message);
+        }
     }
     
     [HttpPost("login")]
-    public Task<LogInUserResult> LoginUserAsync([FromBody] LogInUserCommand request,
+    public async Task<IActionResult> LoginUserAsync([FromBody] LogInUserCommand request,
         CancellationToken cancellationToken)
     {
-        return _logInUserUseCase.LogInAsync(request, cancellationToken);
+        try
+        {
+            var result = await _logInUserUseCase.LogInAsync(request, cancellationToken);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            return Unauthorized(exception.Message);
+        }
     }
 }

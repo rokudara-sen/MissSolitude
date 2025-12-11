@@ -26,6 +26,12 @@ builder.Services.AddScoped<UpdateUserUseCase>();
 builder.Services.AddScoped<DeleteUserUseCase>();
 builder.Services.AddScoped<LogInUserUseCase>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Ui", policy =>
+        policy.WithOrigins("http://localhost:8081", "https://localhost:8081").AllowAnyHeader().AllowAnyMethod());
+});
+
 // ------------------------------------------------------------
 
 var app = builder.Build();
@@ -37,10 +43,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 // --------------------- MY CODE ------------------------------
 
+app.UseCors("Ui");
 app.MapControllers();
 
 // ------------------------------------------------------------
