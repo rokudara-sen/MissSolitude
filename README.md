@@ -75,30 +75,30 @@ The provided `compose.yaml` spins up the API alongside PostgreSQL:
 docker compose up --build
 ```
 
-Create a `.env` file or export variables before running:
+Create a `.env` file (copy from `.env.example`) or export variables before running:
 
 ```env
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-POSTGRES_DB=MissSolitude
+POSTGRES_USER=misssolitude
+POSTGRES_PASSWORD=misssolitude
+POSTGRES_DB=misssolitude
+ASPNETCORE_Kestrel__Certificates__Default__Password=changeit
 ```
 
 The API will be available on port `8080` by default.
 
 ### Enabling HTTPS locally
 
-The API can also listen on `https://localhost:8443` when provided a certificate. Docker Compose is preconfigured to load a PFX from `./certificates/misssolitude.pfx` and pass the password via `ASPNETCORE_Kestrel__Certificates__Default__Password`.
+The API can also listen on `https://localhost:8443` when provided a certificate. Docker Compose is preconfigured to load a **PFX** from `./certificates/misssolitude.pfx` and pass the password via `ASPNETCORE_Kestrel__Certificates__Default__Password`. A standalone `.key` file is not sufficient for Kestrel; you need a PKCS#12 bundle (PFX) that includes the certificate and private key.
 
-1. Generate a development certificate and export it to `./certificates/misssolitude.pfx`:
+1. Generate a development certificate (uses OpenSSL) and export it to `./certificates/misssolitude.pfx`:
    ```bash
-   mkdir -p certificates
-   dotnet dev-certs https --clean
-   dotnet dev-certs https -ep ./certificates/misssolitude.pfx -p "your-strong-password"
-   dotnet dev-certs https --trust
+   ./scripts/generate-dev-certificate.sh
    ```
-2. Add the password to your environment (or `.env`) before running Compose:
+    - Set `ASPNETCORE_Kestrel__Certificates__Default__Password` (or `PFX_PASSWORD`) beforehand to choose a password.
+    - If you already have a `misssolitude.key` and `misssolitude.crt`, the script will reuse them to create the PFX. If only one of those files exists, delete the leftover and re-run the script so it can produce both.
+2. Add the same password to your environment (or `.env`) before running Compose:
    ```bash
-   export ASPNETCORE_Kestrel__Certificates__Default__Password="your-strong-password"
+   export ASPNETCORE_Kestrel__Certificates__Default__Password="changeit"
    ```
 3. Start the stack and reach the API at `https://localhost:8443`.
 

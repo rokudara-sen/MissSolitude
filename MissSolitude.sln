@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		SECURITY.md = SECURITY.md
 		.gitignore = .gitignore
 		.env = .env
+		.env.example = .env.example
+		scripts\generate-dev-certificate.sh = scripts\generate-dev-certificate.sh
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissSolitude.Contracts", "MissSolitude.Contracts\MissSolitude.Contracts.csproj", "{FF739F93-0173-4F94-BBAD-F3ED0730F141}"
