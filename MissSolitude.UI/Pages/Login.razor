@@ -1,0 +1,131 @@
+﻿@layout LoginLayout
+@page "/login"
+@using System.Net.Http.Headers
+@using System.Text.Json.Serialization
+@using MissSolitude.Contracts
+@inject HttpClient HttpClient
+
+<PageTitle>Sign In</PageTitle>
+
+<!-- Main Wrapper with forced dark theme classes -->
+<div class="auth-layout">
+    <div class="auth-card">
+        
+        <div class="auth-header">
+            <!-- Optional: You can put a logo img here -->
+            <h1>Welcome back</h1>
+            <p>Please enter your details to sign in.</p>
+        </div>
+
+        <EditForm Model="_user" OnValidSubmit="@ValidateUser">
+            <div class="field">
+                <label for="email">Email Address</label>
+                <div class="input-group">
+                    <!-- Mail Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="16" x="2" y="4" rx="2" />
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                    
+                    <input id="email"
+                           type="email"
+                           @bind="_user.Email"
+                           class="input"
+                           placeholder="name@company.com" 
+                           autocomplete="email" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <!-- Lock Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+
+                    <input id="password"
+                           type="password"
+                           @bind="_user.Password"
+                           class="input"
+                           placeholder="Enter your password" />
+                </div>
+            </div>
+
+            <div class="field-inline">
+                <label class="checkbox-wrap">
+                    <input type="checkbox" />
+                    <span>Remember me</span>
+                </label>
+
+                <a href="#" class="link-reset">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Sign In
+            </button>
+        </EditForm>
+    </div>
+</div>
+
+
+@*@if (_error is not null)
+{
+    <p style="color:red">@_error</p>
+}
+else if (_user is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table>
+        <thead>
+        <tr><th>Name</th></tr>
+        <tr><th>Email</th></tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>@_user.Username</td>
+            <td>@_user.Email</td>
+        </tr>
+        </tbody>
+    </table>
+}*@
+
+@code
+{
+    private UserDto? _user;
+    private string? _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _user = await HttpClient.GetFromJsonAsync<UserDto>($"api/User/{id}");
+        }
+        catch (HttpRequestException exception)
+        {
+            _error = $"Request failed: {exception.Message}";
+        }
+        catch (FormatException)
+        {
+            _error = "Invalid GUID string.";
+        }
+        catch (NotSupportedException exception)
+        {
+            _error = $"Response format error: {exception.Message}";
+        }
+    }
+
+    private async Task<bool> ValidateUser()
+    {
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage();
+        httpRequestMessage.Method = new HttpMethod("POST");
+        httpRequestMessage.RequestUri = new Uri("api/User/login");
+        httpRequestMessage.Content = new StringContent("");
+        httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        await HttpClient.SendAsync(httpRequestMessage);
+    }
+}

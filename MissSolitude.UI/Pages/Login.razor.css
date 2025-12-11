@@ -1,0 +1,225 @@
+﻿/* THEME: Deep Midnight
+   Fixed: Variables are scoped to .auth-layout to guarantee they apply.
+   Fixed: Background is applied to the wrapper, not body, to prevent white-on-white issues.
+*/
+
+.auth-layout {
+    /* Define variables LOCALLY to ensure they exist */
+    --bg-dark: #09090b;
+    --bg-card: #18181b;
+    --bg-input: #27272a;
+    --border-color: #3f3f46;
+
+    --primary: #6366f1; /* Indigo */
+    --primary-hover: #4f46e5;
+
+    --text-white: #fafafa;
+    --text-gray: #a1a1aa;
+
+    /* Layout properties */
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+
+    /* Force the dark background here */
+    background-color: var(--bg-dark);
+    /* Subtle texture to make it less flat */
+    background-image: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(168, 85, 247, 0.1), transparent 40%);
+
+    /* Font reset */
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    color: var(--text-white);
+}
+
+/* CARD */
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2.5rem;
+    border-radius: 1rem;
+
+    /* Solid dark background for reliability */
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+
+    /* Strong shadow for pop */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* HEADER */
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-white);
+    letter-spacing: -0.025em;
+}
+
+.auth-header p {
+    margin: 0;
+    color: var(--text-gray);
+    font-size: 0.95rem;
+}
+
+/* INPUTS */
+.field {
+    margin-bottom: 1.25rem;
+}
+
+.field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-gray);
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--text-gray);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem; /* Space for icon */
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    color: var(--text-white);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input::placeholder {
+    color: #52525b;
+}
+
+.input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    background-color: #27272a; /* Keep dark on focus */
+}
+
+/* CHECKBOX & LINKS */
+.field-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-gray);
+    user-select: none;
+}
+
+.checkbox-wrap input[type="checkbox"] {
+    accent-color: var(--primary);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.link-reset {
+    font-size: 0.875rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-reset:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* BUTTONS */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-ghost {
+    background-color: transparent;
+    color: var(--text-gray);
+    border: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.btn-ghost:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-white);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    color: var(--text-gray);
+    margin: 1.5rem 0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: var(--border-color);
+}
+
+.divider span {
+    padding: 0 1rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
