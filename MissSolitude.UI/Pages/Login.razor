@@ -65,7 +65,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary" disabled="@_isSubmitting">
-                @_buttonText
+                @ButtonText
             </button>
             
             @if (!string.IsNullOrWhiteSpace(_error))
@@ -95,7 +95,7 @@
     private bool _isSubmitting;
     private string? _error;
 
-    private string _buttonText => _isSubmitting ? "Signing in..." : "Sign In";
+    private string ButtonText => _isSubmitting ? "Signing in..." : "Sign In";
 
     private async Task ValidateUser()
     {
@@ -105,7 +105,7 @@
 
         try
         {
-            var response = await HttpClient.PostAsJsonAsync("api/User/login", new LogInUserCommand(_login.Identifier, _login.Password));
+            var response = await HttpClient.PostAsJsonAsync("api/User/login", _login);
 
             if (response.IsSuccessStatusCode)
             {
@@ -140,6 +140,4 @@
     }
     
     private sealed record LoginResponse(string AccessToken, string RefreshToken, UserDto User);
-
-    private sealed record LogInUserCommand(string Identifier, string Password);
 }
