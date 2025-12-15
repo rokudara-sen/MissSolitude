@@ -2,6 +2,7 @@
 using MissSolitude.Application.Commands;
 using MissSolitude.Application.UseCases.User;
 using MissSolitude.Contracts;
+using MissSolitude.Contracts.User;
 
 namespace MissSolitude.API.Controllers;
 
