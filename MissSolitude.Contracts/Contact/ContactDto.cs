@@ -2,4 +2,4 @@
 
 namespace MissSolitude.Contracts.Contact;
 
-public record ContactDto(Guid Id, string FirstName, string LastName, string Phone, EmailAddress Email, string Notes);
+public record ContactDto(Guid Id, string FirstName, string LastName, EmailAddress? Email, string? Phone, string? Notes);

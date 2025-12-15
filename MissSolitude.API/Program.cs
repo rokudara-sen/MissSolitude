@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MissSolitude.Application.UseCases.Contact;
 using MissSolitude.Application.UseCases.User;
 using MissSolitude.Infrastructure;
 using MissSolitude.Infrastructure.Auth;
@@ -19,11 +20,17 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddInfrastructure();
+
+builder.Services.AddScoped<CreateContactUseCase>();
+builder.Services.AddScoped<ReadContactUseCase>();
+
 builder.Services.AddScoped<CreateUserUseCase>();
 builder.Services.AddScoped<ReadUserUseCase>();
 builder.Services.AddScoped<UpdateUserUseCase>();
 builder.Services.AddScoped<DeleteUserUseCase>();
 builder.Services.AddScoped<LogInUserUseCase>();
+
+
 
 builder.Services.AddCors(options =>
 {
