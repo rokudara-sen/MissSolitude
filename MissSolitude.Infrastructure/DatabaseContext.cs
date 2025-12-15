@@ -18,7 +18,13 @@ public class DatabaseContext : DbContext
             builderUser.Property(user => user.Email)
                 .HasConversion(email => email.Value, value => new EmailAddress(value)).HasColumnName("Email");
         });
+        modelBuilder.Entity<Contact>(builderContact =>
+        {
+            builderContact.Property(contact => contact.Email)
+                .HasConversion(email => email.HasValue ? email.Value.Value : null, value => value == null ? null : new EmailAddress(value)).HasColumnName("Email").IsRequired(false);
+        });
     }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Contact> Contacts { get; set; }
 }
