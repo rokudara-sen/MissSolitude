@@ -154,4 +154,71 @@ public class ContactControllerTest
         
         useCaseMock.Verify(x => x.ExecuteAsync(It.IsAny<UpdateContactCommand>(), It.IsAny<CancellationToken>()), Times.Never);
     }
+
+    [Fact]
+    public async Task Update_shouldReturnNotFound_WhenContactDoesNotExist()
+    {
+        // Arrange
+        var useCaseMock = new Mock<UpdateContactUseCase>(MockBehavior.Default, default!, default!);
+        var expectedError = "Contact not found.";
+        
+        var contactId = Guid.NewGuid(); 
+        
+        useCaseMock
+            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<UpdateContactCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new KeyNotFoundException(expectedError));
+        
+        var command = new UpdateContactCommand(contactId, "John", "Doe", new EmailAddress("john@doe.com"), "123", "Note");
+
+        var controller = new ContactController(default!, default!, useCaseMock.Object, default!);
+        
+        // Act
+        var response = await controller.UpdateContactAsync(contactId, command, CancellationToken.None);
+        
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(response);
+        Assert.Equal(expectedError, notFoundResult.Value);
+    }
+
+    [Fact]
+    public async Task Delete_shouldReturnNoContent_WhenUseCaseSucceeds()
+    {
+        // Arrange
+        var useCaseMock = new Mock<DeleteContactUseCase>(MockBehavior.Default, default!, default!);
+        var contactId = Guid.NewGuid();
+        
+        useCaseMock
+            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        
+        var controller = new ContactController(default!, default!, default!, useCaseMock.Object);
+        
+        // Act
+        var response = await controller.DeleteContact(contactId, CancellationToken.None);
+        
+        // Assert
+        Assert.IsType<NoContentResult>(response);
+        useCaseMock.Verify(useCase => useCase.ExecuteAsync(contactId, It.IsAny<CancellationToken>()), Times.Once);
+    }
+    
+    [Fact]
+    public async Task Delete_shouldReturnNotFound_WhenContactDoesNotExist()
+    {
+        // Arrange
+        var useCaseMock = new Mock<DeleteContactUseCase>(MockBehavior.Default, default!, default!);
+        var expectedError = "Contact not found.";
+        
+        useCaseMock
+            .Setup(useCase => useCase.ExecuteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new KeyNotFoundException(expectedError));
+
+        var controller = new ContactController(default!, default!, default!, useCaseMock.Object);
+        
+        // Act
+        var response = await controller.DeleteContact(Guid.NewGuid(), CancellationToken.None);
+        
+        // Assert
+        var notFoundResult = Assert.IsType<NotFoundObjectResult>(response);
+        Assert.Equal(expectedError, notFoundResult.Value);
+    }
 }
