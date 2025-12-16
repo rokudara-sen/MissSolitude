@@ -25,7 +25,7 @@ public class ContactControllerTest
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<CreateContactCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResult);
         
-        var controller = new ContactController(useCaseMock.Object, default!, default!, default!);
+        var controller = CreateController(create: useCaseMock.Object);
         var command = new CreateContactCommand("John", "Doe", new EmailAddress("john@doe.com"), "123", "Note");
         
         // Act
@@ -49,7 +49,7 @@ public class ContactControllerTest
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<CreateContactCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new InvalidOperationException(expectedError));
         
-        var controller = new ContactController(useCaseMock.Object, default!, default!, default!);
+        var controller = CreateController(create: useCaseMock.Object);
         var command = new CreateContactCommand("John", "Doe", new EmailAddress("john@doe.com"), "123", "Note");
         
         // Act
@@ -71,7 +71,7 @@ public class ContactControllerTest
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResult);
 
-        var controller = new ContactController(default!, useCaseMock.Object, default!, default!);
+        var controller = CreateController(read: useCaseMock.Object);
         
         // Act
         var response = await controller.ReadContactAsync(expectedResult.Id, CancellationToken.None);
@@ -94,7 +94,7 @@ public class ContactControllerTest
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new KeyNotFoundException(expectedError));
 
-        var controller = new ContactController(default!, useCaseMock.Object, default!, default!);
+        var controller = CreateController(read: useCaseMock.Object);
         
         // Act
         var response = await controller.ReadContactAsync(Guid.NewGuid(), CancellationToken.None);
@@ -119,7 +119,7 @@ public class ContactControllerTest
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<UpdateContactCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResult);
 
-        var controller = new ContactController(default!, default!, useCaseMock.Object, default!);
+        var controller = CreateController(update: useCaseMock.Object);
     
         // Act
         var response = await controller.UpdateContactAsync(contactId, command, CancellationToken.None);
@@ -138,7 +138,7 @@ public class ContactControllerTest
     {
         // Arrange
         var useCaseMock = new Mock<UpdateContactUseCase>(MockBehavior.Default, default!, default!);
-        var controller = new ContactController(default!, default!, useCaseMock.Object, default!);
+        var controller = CreateController(update: useCaseMock.Object);
 
         var routeId = Guid.NewGuid();
         var differentBodyId = Guid.NewGuid();
@@ -170,7 +170,7 @@ public class ContactControllerTest
         
         var command = new UpdateContactCommand(contactId, "John", "Doe", new EmailAddress("john@doe.com"), "123", "Note");
 
-        var controller = new ContactController(default!, default!, useCaseMock.Object, default!);
+        var controller = CreateController(update: useCaseMock.Object);
         
         // Act
         var response = await controller.UpdateContactAsync(contactId, command, CancellationToken.None);
@@ -191,7 +191,7 @@ public class ContactControllerTest
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         
-        var controller = new ContactController(default!, default!, default!, useCaseMock.Object);
+        var controller = CreateController(delete: useCaseMock.Object);
         
         // Act
         var response = await controller.DeleteContact(contactId, CancellationToken.None);
@@ -212,7 +212,7 @@ public class ContactControllerTest
             .Setup(useCase => useCase.ExecuteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new KeyNotFoundException(expectedError));
 
-        var controller = new ContactController(default!, default!, default!, useCaseMock.Object);
+        var controller = CreateController(delete: useCaseMock.Object);
         
         // Act
         var response = await controller.DeleteContact(Guid.NewGuid(), CancellationToken.None);
@@ -220,5 +220,21 @@ public class ContactControllerTest
         // Assert
         var notFoundResult = Assert.IsType<NotFoundObjectResult>(response);
         Assert.Equal(expectedError, notFoundResult.Value);
+        
+        useCaseMock.Verify(useCase => useCase.ExecuteAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+    
+    private ContactController CreateController(
+        CreateContactUseCase? create = null,
+        ReadContactUseCase? read = null,
+        UpdateContactUseCase? update = null,
+        DeleteContactUseCase? delete = null)
+    {
+        return new ContactController(
+            create ?? new Mock<CreateContactUseCase>(MockBehavior.Default, default!, default!).Object,
+            read   ?? new Mock<ReadContactUseCase>(MockBehavior.Default, default!).Object,
+            update ?? new Mock<UpdateContactUseCase>(MockBehavior.Default, default!, default!).Object,
+            delete ?? new Mock<DeleteContactUseCase>(MockBehavior.Default, default!, default!).Object
+        );
     }
 }
