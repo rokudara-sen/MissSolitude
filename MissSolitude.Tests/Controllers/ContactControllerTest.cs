@@ -61,7 +61,7 @@ public class ContactControllerTest
     }
 
     [Fact]
-    public async Task Read_shouldReturnOkRequest_WhenUseCaseSucceeds()
+    public async Task Read_shouldReturnOk_WhenUseCaseSucceeds()
     {
         // Arrange
         var useCaseMock = new Mock<ReadContactUseCase>(MockBehavior.Default, default!);
@@ -105,7 +105,7 @@ public class ContactControllerTest
     }
     
     [Fact]
-    public async Task Update_shouldReturnOkRequest_WhenUseCaseSucceeds()
+    public async Task Update_shouldReturnOk_WhenUseCaseSucceeds()
     {
         // Arrange
         var useCaseMock = new Mock<UpdateContactUseCase>(MockBehavior.Default, default!, default!);
