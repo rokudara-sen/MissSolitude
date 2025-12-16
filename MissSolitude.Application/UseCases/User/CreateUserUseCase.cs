@@ -25,10 +25,10 @@ public class CreateUserUseCase
         var username = request.Username.Trim();
         
         if(await _userRepository.EmailExistsAsync(request.Email, cancellationToken))
-            throw new InvalidOperationException("User already exists.");
+            throw new InvalidOperationException("Email already in use.");
         
         if(await _userRepository.UsernameExistsAsync(username, cancellationToken))
-            throw new InvalidOperationException("User already exists.");
+            throw new InvalidOperationException("Username already in use.");
 
         var newUser = new Domain.Entities.User(
             id: Guid.NewGuid(),
