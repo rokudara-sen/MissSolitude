@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MissSolitude.Application.Commands;
+using MissSolitude.Application.Commands.User;
 using MissSolitude.Application.Interfaces.Functions;
 using MissSolitude.Application.Results;
 

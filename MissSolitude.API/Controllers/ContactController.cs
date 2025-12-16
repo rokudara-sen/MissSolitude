@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MissSolitude.Application.Commands;
+using MissSolitude.Application.Commands.Contact;
 using MissSolitude.Application.UseCases.Contact;
 using MissSolitude.Contracts.Contact;
 

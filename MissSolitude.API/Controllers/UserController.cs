@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MissSolitude.Application.Commands;
+using MissSolitude.Application.Commands.User;
 using MissSolitude.Application.UseCases.User;
 using MissSolitude.Contracts;
 using MissSolitude.Contracts.User;
