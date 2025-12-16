@@ -18,7 +18,7 @@ public class CreateContactUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CreateContactResult> ExecuteAsync(CreateContactCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CreateContactResult> ExecuteAsync(CreateContactCommand request, CancellationToken cancellationToken)
     {
         if(await _contactRepository.FirstAndLastNameExistAsync(request.FirstName, request.LastName, cancellationToken))
             throw new InvalidOperationException("Contact already exists.");

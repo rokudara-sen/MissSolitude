@@ -13,7 +13,7 @@ public class ReadContactUseCase
         _contactRepository = contactRepository;
     }
     
-    public async Task<ReadContactResult> ExecuteAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<ReadContactResult> ExecuteAsync(Guid id, CancellationToken cancellationToken)
     {
         var existingContact = await _contactRepository.GetByIdAsync(id, cancellationToken);
         
