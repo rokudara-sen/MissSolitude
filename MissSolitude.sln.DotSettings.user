@@ -1,19 +1,8 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=4C69C9BC_002D0000_002D4D7E_002DBFC0_002D3871B72F5FC5/@EntryIndexedValue">DDC73719-5E8C-4F8C-9607-14BFCA850794</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestTemplateMapping/=xUnit/@EntryIndexedValue">33ff99d8-b1ad-4ed5-a4fd-376b97c2c841</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=123c3124_002D25ce_002D4607_002D935f_002D83a8756b94fc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Create_shouldReturnOk_WhenUseCaseSucceeds" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Create_shouldReturnOk_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Create_shouldReturnBadRequest_WhenContactAlreadyExists&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Read_shouldReturnOkRequest_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Read_shouldReturnNotFound_WhenContactDoesNotExist&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Update_shouldReturnOkRequest_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Update_shouldReturnBadRequest_WhenRouteIdDoesNotMatchBodyId&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Update_shouldReturnNotFound_WhenContactDoesNotExist&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Delete_shouldReturnNoContent_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Delete_shouldReturnNotFound_WhenContactDoesNotExist&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.UserControllerTest.Create_shouldReturnOk_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.UserControllerTest.Create_shouldReturnBadRequest_WhenEmailIsAlreadyInUse&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.UserControllerTest&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=692fef6c_002D88a4_002D4f1d_002Dbbd0_002Da0867dbd95e8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	</wpf:ResourceDictionary>
