@@ -20,7 +20,7 @@ public class UpdateUserUseCase
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<ReadUserResult> ExecuteAsync(UpdateUserCommand request, CancellationToken cancellationToken)
+    public virtual async Task<ReadUserResult> ExecuteAsync(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(request.Id, cancellationToken);
         

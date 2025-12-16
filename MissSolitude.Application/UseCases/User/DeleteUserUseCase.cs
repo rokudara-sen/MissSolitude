@@ -14,7 +14,7 @@ public class DeleteUserUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task ExecuteAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task ExecuteAsync(Guid id, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(id, cancellationToken);
         

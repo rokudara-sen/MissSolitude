@@ -20,7 +20,7 @@ public class CreateUserUseCase
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CreateUserResult> ExecuteAsync(CreateUserCommand request, CancellationToken cancellationToken)
+    public virtual async Task<CreateUserResult> ExecuteAsync(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var username = request.Username.Trim();
         

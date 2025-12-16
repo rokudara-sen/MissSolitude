@@ -20,7 +20,7 @@ public class LogInUserUseCase
         _tokenService = tokenService;
     }
     
-    public async Task<LogInUserResult> LogInAsync(LogInUserCommand request, CancellationToken cancellationToken)
+    public virtual async Task<LogInUserResult> LogInAsync(LogInUserCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByEmailOrUsernameAsync(request.Identifier, cancellationToken);
         

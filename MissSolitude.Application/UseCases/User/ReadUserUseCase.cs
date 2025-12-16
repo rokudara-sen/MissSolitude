@@ -13,7 +13,7 @@ public class ReadUserUseCase
         _userRepository = userRepository;
     }
 
-    public async Task<ReadUserResult> ExecuteAsync(Guid id, CancellationToken cancellationToken)
+    public virtual async Task<ReadUserResult> ExecuteAsync(Guid id, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(id, cancellationToken);
         
