@@ -20,7 +20,7 @@ public class UpdateUserUseCase
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<UpdateUserResult> ExecuteAsync(UpdateUserCommand request, CancellationToken cancellationToken)
+    public async Task<ReadUserResult> ExecuteAsync(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(request.Id, cancellationToken);
         
@@ -32,6 +32,6 @@ public class UpdateUserUseCase
         existingUser.Email = request.Email;
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        return new UpdateUserResult(request.Id, existingUser.Username, existingUser.Email);
+        return new ReadUserResult(request.Id, existingUser.Username, existingUser.Email);
     }
 }
