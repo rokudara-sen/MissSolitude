@@ -1,16 +1,36 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <NavMenu />
+    </aside>
+
+    <div class="workspace">
+        <header class="app-header">
+            <div class="header-breadcrumbs">
+                <!-- Placeholder for dynamic breadcrumbs or page title -->
+                <span class="text-muted">Dashboard</span>
+                <span class="divider">/</span>
+                <span class="current-page">Overview</span>
+            </div>
+            
+            <div class="header-actions">
+                <a href="https://learn.microsoft.com/aspnet/core/" 
+                   target="_blank" 
+                   rel="noreferrer noopener"
+                   class="ghost-button">
+                    Documentation
+                </a>
+                
+                <!-- User Profile Trigger -->
+                <button class="user-profile" aria-label="User menu"></button>
+            </div>
+        </header>
+
+        <main class="content-shell">
+            <article class="content-card">
+                @Body
+            </article>
+        </main>
     </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
 </div>
