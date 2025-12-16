@@ -12,5 +12,8 @@
     &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Update_shouldReturnNotFound_WhenContactDoesNotExist&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Delete_shouldReturnNoContent_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Delete_shouldReturnNotFound_WhenContactDoesNotExist&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.UserControllerTest.Create_shouldReturnOk_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.UserControllerTest.Create_shouldReturnBadRequest_WhenEmailIsAlreadyInUse&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.UserControllerTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
