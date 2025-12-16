@@ -63,7 +63,9 @@ public class UserController : ControllerBase
     {
         try
         {
-            request = request with { Id = id };
+            if (id != request.Id) 
+                return BadRequest("Body id and route id do not match.");
+            
             var result = await _updateUserUseCase.ExecuteAsync(request, cancellationToken);
             var userDto = new UserDto(result.Id, result.Username, result.Email);
             return Ok(userDto);
