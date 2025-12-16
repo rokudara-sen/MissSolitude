@@ -276,6 +276,27 @@ public class UserControllerTest
         useCaseMock.Verify(x => x.LogInAsync(command, It.IsAny<CancellationToken>()), Times.Once);
     }
     
+    [Fact]
+    public async Task Login_shouldReturnUnauthorized_WhenCredentialsAreInvalid()
+    {
+        // Arrange
+        var useCaseMock = new Mock<LogInUserUseCase>(MockBehavior.Default, default!, default!, default!);
+
+        useCaseMock
+            .Setup(x => x.LogInAsync(It.IsAny<LogInUserCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new UnauthorizedAccessException("Invalid credentials."));
+        
+        var controller = CreateController(login: useCaseMock.Object);
+        var command = new LogInUserCommand("wrong@email.com", "WrongPass");
+
+        // Act
+        var response = await controller.LoginUserAsync(command, CancellationToken.None);
+
+        // Assert
+        var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(response);
+        Assert.Equal("Invalid credentials.", unauthorizedResult.Value);
+    }
+    
     private UserController CreateController(
         CreateUserUseCase? create = null,
         ReadUserUseCase? read = null,
