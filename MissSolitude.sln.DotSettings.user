@@ -5,5 +5,9 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Create_shouldReturnOk_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Create_shouldReturnBadRequest_WhenContactAlreadyExists&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Read_shouldReturnOkRequest_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Read_shouldReturnNotFound_WhenContactDoesNotExist&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Update_shouldReturnOkRequest_WhenUseCaseSucceeds&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::DDC73719-5E8C-4F8C-9607-14BFCA850794::net8.0::MissSolitude.Tests.Controllers.ContactControllerTest.Update_shouldReturnBadRequest_WhenRouteIdDoesNotMatchBodyId&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
