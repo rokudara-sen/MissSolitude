@@ -3,6 +3,7 @@ using MissSolitude.Application.Commands.Contact;
 using MissSolitude.Application.Interfaces.Functions;
 using MissSolitude.Application.Interfaces.Repositories;
 using MissSolitude.Application.Results;
+using MissSolitude.Application.Results.Contact;
 
 namespace MissSolitude.Application.UseCases.Contact;
 

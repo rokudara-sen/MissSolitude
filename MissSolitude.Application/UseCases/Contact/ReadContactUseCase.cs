@@ -1,5 +1,6 @@
 ﻿using MissSolitude.Application.Interfaces.Repositories;
 using MissSolitude.Application.Results;
+using MissSolitude.Application.Results.Contact;
 
 namespace MissSolitude.Application.UseCases.Contact;
 

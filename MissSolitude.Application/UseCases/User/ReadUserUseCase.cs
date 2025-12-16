@@ -1,5 +1,6 @@
 ﻿using MissSolitude.Application.Interfaces.Repositories;
 using MissSolitude.Application.Results;
+using MissSolitude.Application.Results.User;
 
 namespace MissSolitude.Application.UseCases.User;
 
