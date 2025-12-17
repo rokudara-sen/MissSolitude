@@ -18,23 +18,23 @@ public class UserRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifetime
         _fixture = fixture;
         _userRepository = new UserRepository(_fixture.Context);
     }
-    
+
     public async Task InitializeAsync()
     {
         await _fixture.ResetDatabaseAsync();
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
-    
+
     [Fact]
     public async Task GetByEmailOrUsernameAsync_ShouldReturnUser_WhenInputIsEmail()
     {
         // Arrange
         var expectedUser = new User(Guid.NewGuid(), "John", "john_password_hash", new EmailAddress("john@example.com"));
-        
+
         await _fixture.Context.Users.AddAsync(expectedUser);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -44,16 +44,16 @@ public class UserRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifetime
         Assert.NotNull(result);
         Assert.Equal(expectedUser.Id, result.Id);
     }
-    
+
     [Fact]
     public async Task GetByEmailOrUsernameAsync_ShouldReturnUser_WhenInputIsUsername()
     {
         // Arrange
         var expectedUser = new User(Guid.NewGuid(), "random", "jane_doe_password_hash", new EmailAddress("jane@example.com"));
-        
+
         await _fixture.Context.Users.AddAsync(expectedUser);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -63,7 +63,7 @@ public class UserRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifetime
         Assert.NotNull(result);
         Assert.Equal(expectedUser.Id, result.Id);
     }
-    
+
     [Fact]
     public async Task GetByEmailOrUsernameAsync_ShouldReturnNull_WhenNoMatch()
     {
@@ -80,24 +80,24 @@ public class UserRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifetime
         // Act
         await _userRepository.AddAsync(newUser, CancellationToken.None);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Assert
         var dbUser = await _fixture.Context.Users.FirstOrDefaultAsync(u => u.Id == newUser.Id);
         Assert.NotNull(dbUser);
     }
-    
+
     [Fact]
     public async Task EmailExistsAsync_ShouldReturnTrue_WhenEmailExists()
     {
         // Arrange
         var email = new EmailAddress("exists@test.com");
         var user = new User(Guid.NewGuid(), "exists_user", "hash", email);
-        
+
         await _fixture.Context.Users.AddAsync(user);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -122,10 +122,10 @@ public class UserRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifetime
     {
         // Arrange
         var user = new User(Guid.NewGuid(), "unique_user", "hash", new EmailAddress("unique@test.com"));
-        
+
         await _fixture.Context.Users.AddAsync(user);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -153,10 +153,10 @@ public class UserRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifetime
         var email = new EmailAddress("find@test.com");
         var username = "find_me";
         var user = new User(id, username, "hash", email);
-        
+
         await _fixture.Context.Users.AddAsync(user);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -184,17 +184,17 @@ public class UserRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifetime
     {
         // Arrange
         var user = new User(Guid.NewGuid(), "delete_me", "hash", new EmailAddress("delete@test.com"));
-        
+
         await _fixture.Context.Users.AddAsync(user);
         await _fixture.Context.SaveChangesAsync();
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
         var userToDelete = await _fixture.Context.Users.FirstAsync(u => u.Id == user.Id);
-        
+
         _userRepository.Remove(userToDelete);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Assert

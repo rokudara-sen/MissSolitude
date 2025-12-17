@@ -13,9 +13,9 @@ public class Contact
 
     public Contact()
     {
-        
+
     }
-    
+
     public Contact(Guid id, string firstName, string lastName, EmailAddress? email = default!, string? phone = default!, string? notes = default!)
     {
         Id = id;

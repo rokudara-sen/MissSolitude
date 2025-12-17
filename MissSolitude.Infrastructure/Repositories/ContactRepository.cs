@@ -12,7 +12,7 @@ public class ContactRepository : IContactRepository
     {
         _databaseContext = databaseContext;
     }
-    
+
     public Task<bool> FirstAndLastNameExistAsync(string firstName, string lastName, CancellationToken cancellationToken)
     {
         return _databaseContext.Contacts.AnyAsync(existingContact => existingContact.FirstName == firstName && existingContact.LastName == lastName, cancellationToken);

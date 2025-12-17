@@ -7,7 +7,7 @@ public class DeleteUserUseCase
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     public DeleteUserUseCase(IUserRepository userRepository, IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
@@ -17,10 +17,10 @@ public class DeleteUserUseCase
     public virtual async Task ExecuteAsync(Guid id, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(id, cancellationToken);
-        
-        if(existingUser is null)
+
+        if (existingUser is null)
             throw new KeyNotFoundException("User not found.");
-        
+
         _userRepository.Remove(existingUser);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }

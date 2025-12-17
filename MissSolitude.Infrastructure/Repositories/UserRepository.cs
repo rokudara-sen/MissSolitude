@@ -8,7 +8,7 @@ namespace MissSolitude.Infrastructure.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly DatabaseContext _databaseContext;
-    
+
     public UserRepository(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;

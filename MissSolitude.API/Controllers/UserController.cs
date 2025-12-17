@@ -41,7 +41,7 @@ public class UserController : ControllerBase
             return BadRequest(exception.Message);
         }
     }
-    
+
     [HttpGet("{id:guid}", Name = "GetUserById")]
     public async Task<IActionResult> ReadUserAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -63,9 +63,9 @@ public class UserController : ControllerBase
     {
         try
         {
-            if (id != request.Id) 
+            if (id != request.Id)
                 return BadRequest("Body id and route id do not match.");
-            
+
             var result = await _updateUserUseCase.ExecuteAsync(request, cancellationToken);
             var userDto = new UserDto(result.Id, result.Username, result.Email);
             return Ok(userDto);
@@ -90,7 +90,7 @@ public class UserController : ControllerBase
             return NotFound(exception.Message);
         }
     }
-    
+
     [HttpPost("login")]
     public async Task<IActionResult> LoginUserAsync([FromBody] LogInUserCommand request,
         CancellationToken cancellationToken)

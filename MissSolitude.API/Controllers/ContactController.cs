@@ -14,7 +14,7 @@ public class ContactController : ControllerBase
     private readonly ReadContactUseCase _readContactUseCase;
     private readonly UpdateContactUseCase _updateContactUseCase;
     private readonly DeleteContactUseCase _deleteContactUseCase;
-    
+
     public ContactController(CreateContactUseCase createContactUseCase, ReadContactUseCase readContactUseCase, UpdateContactUseCase updateContactUseCase, DeleteContactUseCase deleteContactUseCase)
     {
         _createContactUseCase = createContactUseCase;
@@ -22,7 +22,7 @@ public class ContactController : ControllerBase
         _updateContactUseCase = updateContactUseCase;
         _deleteContactUseCase = deleteContactUseCase;
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateContactAsync([FromBody] CreateContactCommand request,
         CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ public class ContactController : ControllerBase
             return BadRequest(exception.Message);
         }
     }
-    
+
     [HttpGet("{id:guid}", Name = "GetContactById")]
     public async Task<IActionResult> ReadContactAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -60,9 +60,9 @@ public class ContactController : ControllerBase
     {
         try
         {
-            if (id != request.Id) 
+            if (id != request.Id)
                 return BadRequest("Body id and route id do not match.");
-            
+
             var result = await _updateContactUseCase.ExecuteAsync(request, cancellationToken);
             var contactDto = new ContactDto(result.Id, result.FirstName, result.LastName, result.Email, result.Phone, result.Notes);
             return Ok(contactDto);

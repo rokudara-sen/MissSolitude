@@ -24,7 +24,7 @@ public class PostgresFixture : IAsyncLifetime
 
         // 3. Create the Context
         Context = new DatabaseContext(options);
-        
+
         // 4. Create Tables
         await Context.Database.EnsureCreatedAsync();
     }
@@ -34,7 +34,7 @@ public class PostgresFixture : IAsyncLifetime
         await Context.DisposeAsync();
         await _postgres.DisposeAsync();
     }
-    
+
     // Helper to clean data between tests if necessary
     public async Task ResetDatabaseAsync()
     {

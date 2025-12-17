@@ -31,17 +31,17 @@ public class ContactRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifet
     {
         // Arrange
         var contact = new Contact(
-            Guid.NewGuid(), 
-            "John", 
-            "Doe", 
-            new EmailAddress("john@doe.com"), 
-            "123-456", 
+            Guid.NewGuid(),
+            "John",
+            "Doe",
+            new EmailAddress("john@doe.com"),
+            "123-456",
             "Test Note"
         );
 
         await _fixture.Context.Contacts.AddAsync(contact);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -68,17 +68,17 @@ public class ContactRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifet
         var id = Guid.NewGuid();
         var email = new EmailAddress("jane@doe.com");
         var contact = new Contact(
-            id, 
-            "Jane", 
-            "Doe", 
-            email, 
-            "987-654", 
+            id,
+            "Jane",
+            "Doe",
+            email,
+            "987-654",
             "Another Note"
         );
 
         await _fixture.Context.Contacts.AddAsync(contact);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -109,17 +109,17 @@ public class ContactRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifet
     {
         // Arrange
         var contact = new Contact(
-            Guid.NewGuid(), 
-            "Alice", 
-            "Wonderland", 
-            new EmailAddress("alice@test.com"), 
-            "555-0100", 
+            Guid.NewGuid(),
+            "Alice",
+            "Wonderland",
+            new EmailAddress("alice@test.com"),
+            "555-0100",
             "Down the rabbit hole"
         );
 
         await _fixture.Context.Contacts.AddAsync(contact);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
@@ -145,18 +145,18 @@ public class ContactRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifet
     {
         // Arrange
         var newContact = new Contact(
-            Guid.NewGuid(), 
-            "Bob", 
-            "Builder", 
-            new EmailAddress("bob@construction.com"), 
-            "555-FIXIT", 
+            Guid.NewGuid(),
+            "Bob",
+            "Builder",
+            new EmailAddress("bob@construction.com"),
+            "555-FIXIT",
             "Can we fix it?"
         );
 
         // Act
         await _contactRepository.AddAsync(newContact, CancellationToken.None);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Assert
@@ -170,25 +170,25 @@ public class ContactRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifet
     {
         // Arrange
         var contact = new Contact(
-            Guid.NewGuid(), 
-            "Delete", 
-            "Me", 
-            new EmailAddress("delete@test.com"), 
-            "000-000", 
+            Guid.NewGuid(),
+            "Delete",
+            "Me",
+            new EmailAddress("delete@test.com"),
+            "000-000",
             "Goodbye"
         );
 
         await _fixture.Context.Contacts.AddAsync(contact);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Act
         var contactToDelete = await _fixture.Context.Contacts.FirstAsync(contactContext => contactContext.Id == contact.Id);
-        
+
         _contactRepository.Remove(contactToDelete);
         await _fixture.Context.SaveChangesAsync();
-        
+
         _fixture.Context.ChangeTracker.Clear();
 
         // Assert

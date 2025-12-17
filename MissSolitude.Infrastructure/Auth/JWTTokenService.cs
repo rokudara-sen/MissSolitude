@@ -20,8 +20,8 @@ public sealed class JWTTokenService : ITokenService
     public JWTTokenService(IOptions<TokenOptions> tokenOptions)
     {
         _tokenOptions = tokenOptions.Value;
-        
-        if(string.IsNullOrWhiteSpace(_tokenOptions.SigningKey) || _tokenOptions.SigningKey.Length < 32)
+
+        if (string.IsNullOrWhiteSpace(_tokenOptions.SigningKey) || _tokenOptions.SigningKey.Length < 32)
             throw new ArgumentException("Invalid signing key.");
     }
 
@@ -31,7 +31,7 @@ public sealed class JWTTokenService : ITokenService
 
         var accessExpires = timeNow.AddMinutes(_tokenOptions.AccessTokenMinutes);
         var refresh = CreateRefreshToken();
-        
+
         var accessToken = CreateAccessToken(user, roles, timeNow.UtcDateTime, accessExpires.UtcDateTime);
 
         return new TokenPair(
@@ -54,7 +54,7 @@ public sealed class JWTTokenService : ITokenService
 
         return new RefreshTokenDescriptor(token, hash, expiresAt);
     }
-    
+
     private string CreateAccessToken(TokenUser user, IEnumerable<string>? roles, DateTime issuedAtUtc, DateTime expiresAtUtc)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SigningKey));

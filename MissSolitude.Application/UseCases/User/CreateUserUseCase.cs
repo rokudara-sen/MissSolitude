@@ -23,11 +23,11 @@ public class CreateUserUseCase
     public virtual async Task<CreateUserResult> ExecuteAsync(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var username = request.Username.Trim();
-        
-        if(await _userRepository.EmailExistsAsync(request.Email, cancellationToken))
+
+        if (await _userRepository.EmailExistsAsync(request.Email, cancellationToken))
             throw new InvalidOperationException("Email already in use.");
-        
-        if(await _userRepository.UsernameExistsAsync(username, cancellationToken))
+
+        if (await _userRepository.UsernameExistsAsync(username, cancellationToken))
             throw new InvalidOperationException("Username already in use.");
 
         var newUser = new Domain.Entities.User(
@@ -39,7 +39,7 @@ public class CreateUserUseCase
 
         await _userRepository.AddAsync(newUser, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         return new CreateUserResult(newUser.Id, newUser.Username, newUser.Email);
     }
 }

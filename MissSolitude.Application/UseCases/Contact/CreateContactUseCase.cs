@@ -20,12 +20,12 @@ public class CreateContactUseCase
 
     public virtual async Task<CreateContactResult> ExecuteAsync(CreateContactCommand request, CancellationToken cancellationToken)
     {
-        if(await _contactRepository.FirstAndLastNameExistAsync(request.FirstName, request.LastName, cancellationToken))
+        if (await _contactRepository.FirstAndLastNameExistAsync(request.FirstName, request.LastName, cancellationToken))
             throw new InvalidOperationException("Contact already exists.");
 
         var newContact = new Domain.Entities.Contact(
             id: Guid.NewGuid(),
-            firstName: request.FirstName, 
+            firstName: request.FirstName,
             lastName: request.LastName,
             email: request.Email,
             phone: request.Phone,
@@ -34,7 +34,7 @@ public class CreateContactUseCase
 
         await _contactRepository.AddAsync(newContact, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         return new CreateContactResult(newContact.Id, newContact.FirstName, newContact.LastName, newContact.Email, newContact.Phone, newContact.Notes);
     }
 }

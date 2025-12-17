@@ -13,7 +13,7 @@ public class PasswordHasherTest
     {
         // Arrange
         var password = "MySecurePassword123!";
-        
+
         // Act
         var hash = _systemUnderTest.Hash(password);
         var result = _systemUnderTest.Verify(password, hash);
@@ -21,14 +21,14 @@ public class PasswordHasherTest
         // Assert
         Assert.True(result, "Verify should return true for the correct password.");
     }
-    
+
     [Fact]
     public void Verify_shouldReturnFalse_WhenPasswordDoesNotMatch()
     {
         // Arrange
         var password = "MySecurePassword123!";
         var wrongPassword = "WrongPassword!";
-        
+
         // Act
         var hash = _systemUnderTest.Hash(password);
         var result = _systemUnderTest.Verify(wrongPassword, hash);
@@ -36,7 +36,7 @@ public class PasswordHasherTest
         // Assert
         Assert.False(result, "Verify should return false for an incorrect password.");
     }
-    
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]

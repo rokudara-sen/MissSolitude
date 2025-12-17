@@ -252,13 +252,13 @@ public class UserControllerTest
         var userId = Guid.NewGuid();
         var email = new EmailAddress("john@doe.com");
         var userResult = new ReadUserResult(userId, "JohnDoe", email);
-        
+
         var expectedResult = new LogInUserResult("fake_access_token_123", "fake_refresh_token_456", userResult);
-        
+
         useCaseMock
             .Setup(x => x.LogInAsync(It.IsAny<LogInUserCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResult);
-        
+
         var controller = CreateController(login: useCaseMock.Object);
         var command = new LogInUserCommand("john@doe.com", "Password123!");
 
@@ -268,14 +268,14 @@ public class UserControllerTest
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(response);
         var value = Assert.IsType<LogInUserResult>(okResult.Value);
-        
+
         Assert.Equal(expectedResult.AccessToken, value.AccessToken);
         Assert.Equal(expectedResult.RefreshToken, value.RefreshToken);
         Assert.Equal(expectedResult.User.Email, value.User.Email);
 
         useCaseMock.Verify(x => x.LogInAsync(command, It.IsAny<CancellationToken>()), Times.Once);
     }
-    
+
     [Fact]
     public async Task Login_shouldReturnUnauthorized_WhenCredentialsAreInvalid()
     {
@@ -285,7 +285,7 @@ public class UserControllerTest
         useCaseMock
             .Setup(x => x.LogInAsync(It.IsAny<LogInUserCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new UnauthorizedAccessException("Invalid credentials."));
-        
+
         var controller = CreateController(login: useCaseMock.Object);
         var command = new LogInUserCommand("wrong@email.com", "WrongPass");
 
@@ -296,7 +296,7 @@ public class UserControllerTest
         var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(response);
         Assert.Equal("Invalid credentials.", unauthorizedResult.Value);
     }
-    
+
     private UserController CreateController(
         CreateUserUseCase? create = null,
         ReadUserUseCase? read = null,
@@ -306,10 +306,10 @@ public class UserControllerTest
     {
         return new UserController(
             create ?? new Mock<CreateUserUseCase>(MockBehavior.Default, default!, default!, default!).Object,
-            read   ?? new Mock<ReadUserUseCase>(MockBehavior.Default, default!).Object,
+            read ?? new Mock<ReadUserUseCase>(MockBehavior.Default, default!).Object,
             update ?? new Mock<UpdateUserUseCase>(MockBehavior.Default, default!, default!, default!).Object,
             delete ?? new Mock<DeleteUserUseCase>(MockBehavior.Default, default!, default!).Object,
-            login  ?? new Mock<LogInUserUseCase>(MockBehavior.Default, default!, default!, default!).Object
+            login ?? new Mock<LogInUserUseCase>(MockBehavior.Default, default!, default!, default!).Object
         );
     }
 }

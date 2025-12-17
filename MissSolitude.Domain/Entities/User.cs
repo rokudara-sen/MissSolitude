@@ -11,9 +11,9 @@ public sealed class User
 
     public User()
     {
-        
+
     }
-    
+
     public User(Guid id, string username, string passwordHash, EmailAddress email)
     {
         Id = id;
