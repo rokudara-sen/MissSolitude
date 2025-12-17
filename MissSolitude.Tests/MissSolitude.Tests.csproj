@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MissSolitude.API\MissSolitude.API.csproj" />
+      <ProjectReference Include="..\MissSolitude.Infrastructure\MissSolitude.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

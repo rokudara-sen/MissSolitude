@@ -8,7 +8,7 @@ public class PasswordHasher : IPasswordHasher
     private static readonly object DummyUser = new();
     private readonly PasswordHasher<object> _hasher = new();
 
-    public string Hash(string password) =>
+    public string Hash(string? password) =>
         _hasher.HashPassword(DummyUser, password);
 
     public bool Verify(string password, string passwordHash) =>
