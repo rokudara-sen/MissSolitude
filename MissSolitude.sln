@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissSolitude.UI", "MissSoli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissSolitude.Tests", "MissSolitude.Tests\MissSolitude.Tests.csproj", "{DDC73719-5E8C-4F8C-9607-14BFCA850794}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissSolitude.IntegrationTests", "MissSolitude.IntegrationTests\MissSolitude.IntegrationTests.csproj", "{2C5FB53F-DF67-4ECF-82EC-A7F1150C4B05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{DDC73719-5E8C-4F8C-9607-14BFCA850794}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDC73719-5E8C-4F8C-9607-14BFCA850794}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDC73719-5E8C-4F8C-9607-14BFCA850794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5FB53F-DF67-4ECF-82EC-A7F1150C4B05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C5FB53F-DF67-4ECF-82EC-A7F1150C4B05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C5FB53F-DF67-4ECF-82EC-A7F1150C4B05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5FB53F-DF67-4ECF-82EC-A7F1150C4B05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
