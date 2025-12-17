@@ -8,23 +8,47 @@ on:
     branches:
       - master
 
+env:
+  DOTNET_VERSION: 8.0.x
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.sln', '**/*.csproj', '**/Directory.Packages.props', '**/global.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore MissSolitude.sln
+
+      - name: Verify formatting
+        run: dotnet format --verify-no-changes MissSolitude.sln
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build MissSolitude.sln --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        run: dotnet test MissSolitude.sln --no-build --configuration Release --results-directory ./TestResults --logger "trx;LogFileName=test_results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-results
+          path: TestResults
