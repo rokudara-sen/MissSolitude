@@ -1,1 +1,313 @@
-﻿
+﻿/* THEME: Deep Midnight */
+.dashboard-layout {
+    /* Define variables locally so they work even if MainLayout is different */
+    --bg-dark: #09090b;
+    --bg-card: #18181b;
+    --bg-hover: #27272a;
+    --border-color: #3f3f46;
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
+    --purple: #a855f7;
+    --green: #22c55e;
+    --warning: #f59e0b;
+    --text-white: #fafafa;
+    --text-gray: #a1a1aa;
+    --text-muted: #71717a;
+
+    width: 100%;
+    /* Let it fill the MainLayout container */
+    min-height: 100%;
+
+    /* We don't need a heavy background here since MainLayout provides one, 
+       but we keep variables for the inner elements. 
+       If you want the dashboard strictly "black" inside the glass frame, uncomment below: */
+    /* background-color: var(--bg-dark); */
+
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    color: var(--text-white);
+
+    /* Remove padding if MainLayout already has padding on the content-card */
+    /* padding: 0; */
+}
+
+.dashboard-container {
+    max-width: 100%;
+}
+
+/* HEADER */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-content h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.025em;
+    color: var(--text-white);
+}
+
+.header-content p {
+    color: var(--text-gray);
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-white);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255,255,255,0.05);
+    border-color: var(--text-gray);
+}
+
+/* STATS GRID */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.stat-icon {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon.primary { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
+.stat-icon.purple { background: rgba(168, 85, 247, 0.1); color: var(--purple); }
+.stat-icon.green { background: rgba(34, 197, 94, 0.1); color: var(--green); }
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.stat-trend {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--text-gray);
+}
+
+.stat-trend.positive { color: var(--green); }
+
+/* CONTENT GRID */
+.content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Renamed to avoid MainLayout conflict */
+.content-card-inner {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-white);
+}
+
+.link-reset {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.link-reset:hover { text-decoration: underline; }
+
+/* ACTIVITY LIST */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.activity-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-white);
+    flex-shrink: 0;
+}
+
+.avatar.purple { color: var(--purple); background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.2); }
+.avatar.green { color: var(--green); background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.2); }
+
+.activity-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.activity-text {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+}
+
+.activity-text strong {
+    color: var(--text-white);
+}
+
+.activity-time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* SERVER STATUS */
+.server-status {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.status-row {
+    width: 100%;
+}
+
+.status-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-gray);
+}
+
+.status-info .value {
+    color: var(--text-white);
+    font-weight: 600;
+}
+
+.status-info .value.warning { color: var(--warning); }
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: var(--bg-hover);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background-color: var(--primary);
+    border-radius: 3px;
+}
+
+.fill.warning { background-color: var(--warning); }
+
+.card-divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 1.5rem 0;
+}
+
+.info-box {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: rgba(99, 102, 241, 0.05);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 0.5rem;
+    color: var(--text-gray);
+    font-size: 0.85rem;
+    align-items: center;
+}
