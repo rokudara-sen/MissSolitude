@@ -10,7 +10,7 @@ public class PostgresFixture : IAsyncLifetime
         .WithImage("postgres:16")
         .Build();
 
-    public DatabaseContext Context { get; private set; }
+    public DatabaseContext Context { get; private set; } = default!;
 
     public async Task InitializeAsync()
     {
