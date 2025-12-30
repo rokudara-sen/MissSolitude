@@ -10,12 +10,12 @@ using MissSolitude.Application.Results.User;
 
 namespace MissSolitude.Infrastructure.Auth;
 
-public sealed class JWTTokenService : ITokenService
+public sealed class JwtTokenService : ITokenService
 {
     private readonly TokenOptions _tokenOptions;
     private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new();
 
-    public JWTTokenService(IOptions<TokenOptions> tokenOptions)
+    public JwtTokenService(IOptions<TokenOptions> tokenOptions)
     {
         _tokenOptions = tokenOptions.Value;
 

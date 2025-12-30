@@ -14,7 +14,7 @@ public static class DependencyInjection
         services.AddScoped<IContactRepository, ContactRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
-        services.AddSingleton<ITokenService, JWTTokenService>();
+        services.AddSingleton<ITokenService, JwtTokenService>();
         return services;
     }
 }
