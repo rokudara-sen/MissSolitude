@@ -51,6 +51,23 @@
       - misssolitude.api
       - misssolitude.ui
     networks: [backend, edge]
+  
+  migrator:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    working_dir: /src
+    volumes:
+      - ./:/src
+    environment:
+      ConnectionStrings__Default: Host=postgresDatabase;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    depends_on:
+      postgresDatabase:
+        condition: service_healthy
+    networks: [backend, edge]
+    command: >
+      bash -lc "
+      dotnet tool restore &&
+      dotnet tool run dotnet-ef database update --project MissSolitude.Infrastructure --startup-project MissSolitude.API
+      "
 
 volumes:
   postgresData:
