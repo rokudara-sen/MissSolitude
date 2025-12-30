@@ -4,10 +4,8 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MissSolitude.Application.Commands;
 using MissSolitude.Application.Commands.User;
 using MissSolitude.Application.Interfaces.Functions;
-using MissSolitude.Application.Results;
 using MissSolitude.Application.Results.User;
 
 namespace MissSolitude.Infrastructure.Auth;
