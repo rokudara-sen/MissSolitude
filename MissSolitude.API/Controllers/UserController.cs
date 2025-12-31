@@ -106,7 +106,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPut("register")]
+    [HttpPost("register")]
     public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
