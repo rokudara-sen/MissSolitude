@@ -113,7 +113,8 @@ public class UserController : ControllerBase
         try
         {
             var result = await _registerUserUseCase.RegisterUserAsync(request, cancellationToken);
-            return Ok(result);
+            var userDto = new UserDto(result.Id, result.Username, result.Email);
+            return CreatedAtRoute("GetUserById", new { id = userDto.Id }, userDto);
         }
         catch (InvalidOperationException exception)
         {
