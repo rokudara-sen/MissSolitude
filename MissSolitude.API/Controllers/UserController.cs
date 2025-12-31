@@ -14,14 +14,16 @@ public class UserController : ControllerBase
     private readonly UpdateUserUseCase _updateUserUseCase;
     private readonly DeleteUserUseCase _deleteUserUseCase;
     private readonly LogInUserUseCase _logInUserUseCase;
+    private readonly RegisterUserUseCase _registerUserUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase, ReadUserUseCase readUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, LogInUserUseCase logInUserUseCase)
+    public UserController(CreateUserUseCase createUserUseCase, ReadUserUseCase readUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase, LogInUserUseCase logInUserUseCase, RegisterUserUseCase registerUserUseCase)
     {
         _createUserUseCase = createUserUseCase;
         _readUserUseCase = readUserUseCase;
         _updateUserUseCase = updateUserUseCase;
         _deleteUserUseCase = deleteUserUseCase;
         _logInUserUseCase = logInUserUseCase;
+        _registerUserUseCase = registerUserUseCase;
     }
 
     [HttpPost]
@@ -101,6 +103,21 @@ public class UserController : ControllerBase
         catch (UnauthorizedAccessException exception)
         {
             return Unauthorized(exception.Message);
+        }
+    }
+
+    [HttpPut("register")]
+    public async Task<IActionResult> RegisterUserAsync([FromBody] RegisterUserCommand request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _registerUserUseCase.RegisterUserAsync(request, cancellationToken);
+            return Ok(result);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return BadRequest(exception.Message);
         }
     }
 }

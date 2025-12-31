@@ -302,14 +302,16 @@ public class UserControllerTest
         ReadUserUseCase? read = null,
         UpdateUserUseCase? update = null,
         DeleteUserUseCase? delete = null,
-        LogInUserUseCase? login = null)
+        LogInUserUseCase? login = null,
+        RegisterUserUseCase? register = null)
     {
         return new UserController(
             create ?? new Mock<CreateUserUseCase>(MockBehavior.Default, default!, default!, default!).Object,
             read ?? new Mock<ReadUserUseCase>(MockBehavior.Default, default!).Object,
             update ?? new Mock<UpdateUserUseCase>(MockBehavior.Default, default!, default!, default!).Object,
             delete ?? new Mock<DeleteUserUseCase>(MockBehavior.Default, default!, default!).Object,
-            login ?? new Mock<LogInUserUseCase>(MockBehavior.Default, default!, default!, default!).Object
+            login ?? new Mock<LogInUserUseCase>(MockBehavior.Default, default!, default!, default!).Object,
+            register ?? new Mock<RegisterUserUseCase>(MockBehavior.Default, default!, default!, default!).Object
         );
     }
 }
