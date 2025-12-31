@@ -296,7 +296,7 @@ public class UserControllerTest
         var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(response);
         Assert.Equal("Invalid credentials.", unauthorizedResult.Value);
     }
-    
+
     [Fact]
     public async Task Register_shouldReturnOk_WhenUseCaseSucceeds()
     {
