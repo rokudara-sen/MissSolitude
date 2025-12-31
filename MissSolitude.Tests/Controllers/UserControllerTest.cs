@@ -296,6 +296,74 @@ public class UserControllerTest
         var unauthorizedResult = Assert.IsType<UnauthorizedObjectResult>(response);
         Assert.Equal("Invalid credentials.", unauthorizedResult.Value);
     }
+    
+    [Fact]
+    public async Task Register_shouldReturnOk_WhenUseCaseSucceeds()
+    {
+        // Arrange
+        var useCaseMock = new Mock<RegisterUserUseCase>(MockBehavior.Default, default!, default!, default!);
+        var expectedResult = new CreateUserResult(Guid.NewGuid(), "John", new EmailAddress("john@doe.com"));
+
+        useCaseMock
+            .Setup(useCase => useCase.RegisterUserAsync(It.IsAny<RegisterUserCommand>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(expectedResult);
+
+        var controller = CreateController(register: useCaseMock.Object);
+        var command = new RegisterUserCommand("John", "John123", new EmailAddress("john@doe.com"));
+
+        // Act
+        var response = await controller.RegisterUserAsync(command, CancellationToken.None);
+
+        // Assert
+        var createdResult = Assert.IsType<CreatedAtRouteResult>(response);
+
+        var value = Assert.IsType<UserDto>(createdResult.Value);
+        Assert.Equal(expectedResult.Email, value.Email);
+    }
+
+    [Fact]
+    public async Task Register_shouldReturnBadRequest_WhenEmailIsAlreadyInUse()
+    {
+        // Arrange
+        var useCaseMock = new Mock<RegisterUserUseCase>(MockBehavior.Default, default!, default!, default!);
+        var expectedError = "Email already in use.";
+
+        useCaseMock
+            .Setup(useCase => useCase.RegisterUserAsync(It.IsAny<RegisterUserCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException(expectedError));
+
+        var controller = CreateController(register: useCaseMock.Object);
+        var command = new RegisterUserCommand("John", "John123", new EmailAddress("john@doe.com"));
+
+        // Act
+        var response = await controller.RegisterUserAsync(command, CancellationToken.None);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response);
+        Assert.Equal(expectedError, badRequestResult.Value);
+    }
+
+    [Fact]
+    public async Task Register_shouldReturnBadRequest_WhenUsernameIsAlreadyInUse()
+    {
+        // Arrange
+        var useCaseMock = new Mock<RegisterUserUseCase>(MockBehavior.Default, default!, default!, default!);
+        var expectedError = "Username already in use.";
+
+        useCaseMock
+            .Setup(useCase => useCase.RegisterUserAsync(It.IsAny<RegisterUserCommand>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException(expectedError));
+
+        var controller = CreateController(register: useCaseMock.Object);
+        var command = new RegisterUserCommand("John", "John123", new EmailAddress("john@doe.com"));
+
+        // Act
+        var response = await controller.RegisterUserAsync(command, CancellationToken.None);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(response);
+        Assert.Equal(expectedError, badRequestResult.Value);
+    }
 
     private UserController CreateController(
         CreateUserUseCase? create = null,
