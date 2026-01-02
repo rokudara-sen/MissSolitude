@@ -27,7 +27,7 @@ public class ContactRepository : IContactRepository
     {
         return _databaseContext.Contacts.SingleOrDefaultAsync(existingContact => existingContact.FirstName == firstName && existingContact.LastName == lastName, cancellationToken);
     }
-    
+
     public async Task<IReadOnlyList<Contact>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _databaseContext.Contacts.AsNoTracking().OrderBy(contact => contact.LastName).ThenBy(contact => contact.FirstName).ToListAsync(cancellationToken);
