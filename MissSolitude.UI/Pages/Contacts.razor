@@ -1,0 +1,418 @@
+﻿@page "/contacts"
+@inject HttpClient Http
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
+
+<PageTitle>Contacts</PageTitle>
+
+<div class="dashboard-layout">
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <p class="eyebrow">Directory</p>
+                <h1>Contacts</h1>
+                <p>Review and manage everyone in your Miss Solitude workspace.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" @onclick="LoadContactsAsync">Refresh</button>
+                <button class="btn btn-primary" @onclick="OpenCreateForm">New Contact</button>
+            </div>
+        </header>
+
+        <div class="contact-toolbar">
+            <div class="search-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input placeholder="Search contacts" @bind="searchTerm" @bind:event="oninput" />
+            </div>
+            <div class="toolbar-summary">
+                <span class="pill">Total: @contacts.Count</span>
+                <span class="pill pill-ghost">Showing @FilteredContacts.Count() entries</span>
+            </div>
+        </div>
+
+        <div class="content-card-inner contact-card">
+            <div class="list-header">
+                <span>Contact</span>
+                <span>Email</span>
+                <span>Phone</span>
+                <span>Notes</span>
+                <span class="actions-header">Actions</span>
+            </div>
+
+            @if (isLoading)
+            {
+                <div class="empty-state">Loading contacts…</div>
+            }
+            else if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="empty-state error">@errorMessage</div>
+            }
+            else if (!FilteredContacts.Any())
+            {
+                <div class="empty-state">No contacts match your search.</div>
+            }
+            else
+            {
+                <div class="contact-list">
+                    @foreach (var contact in FilteredContacts)
+                    {
+                        <div class="contact-row @(pendingDeleteContactId == contact.Id ? "pending-delete" : string.Empty)">
+                            <div class="person">
+                                <div class="avatar">@contact.Initials</div>
+                                <div class="person-details">
+                                    <span class="name">@contact.FullName</span>
+                                    <span class="secondary">@contact.Notes</span>
+                                </div>
+                            </div>
+                            <span class="secondary">@(!string.IsNullOrWhiteSpace(contact.Email) ? contact.Email : "Not provided")</span>
+                            <span class="secondary">@(!string.IsNullOrWhiteSpace(contact.Phone) ? contact.Phone : "—")</span>
+                            <span class="notes">@(!string.IsNullOrWhiteSpace(contact.Notes) ? contact.Notes : "—")</span>
+                            <div class="row-actions">
+                                @if (pendingDeleteContactId == contact.Id)
+                                {
+                                    <span class="secondary">Delete this contact?</span>
+                                    <button class="btn btn-ghost" @onclick="() => CancelDelete(contact.Id)">Cancel</button>
+                                    <button class="btn btn-danger" disabled="@isSubmitting" @onclick="() => DeleteContactAsync(contact.Id)">Confirm</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-ghost" @onclick="() => OpenEditForm(contact)">Edit</button>
+                                    <button class="btn btn-danger" @onclick="() => ConfirmDelete(contact.Id)">Delete</button>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    @if (isFormOpen)
+    {
+        <div class="modal-overlay" role="dialog" aria-modal="true">
+            <div class="contact-modal">
+                <div class="contact-modal-header">
+                    <div>
+                        <p class="eyebrow">@((isEditing ? "Edit" : "Add") + " Contact")</p>
+                        <h2>@(isEditing ? "Update contact details" : "Create a new contact")</h2>
+                        <p class="muted">@("Keep names, email, phone, and notes tidy so your team can reach people quickly.")</p>
+                    </div>
+                    <button class="icon-button" @onclick="CloseForm" aria-label="Close dialog">✕</button>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(formError))
+                {
+                    <div class="form-alert">@formError</div>
+                }
+
+                <EditForm Model="formModel" OnValidSubmit="SaveContactAsync">
+                    <DataAnnotationsValidator />
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label>First name</label>
+                            <InputText @bind-Value="formModel.FirstName" />
+                            <ValidationMessage For="() => formModel.FirstName" />
+                        </div>
+                        <div class="form-field">
+                            <label>Last name</label>
+                            <InputText @bind-Value="formModel.LastName" />
+                            <ValidationMessage For="() => formModel.LastName" />
+                        </div>
+                        <div class="form-field">
+                            <label>Email</label>
+                            <InputText @bind-Value="formModel.Email" type="email" />
+                            <ValidationMessage For="() => formModel.Email" />
+                        </div>
+                        <div class="form-field">
+                            <label>Phone</label>
+                            <InputText @bind-Value="formModel.Phone" />
+                            <ValidationMessage For="() => formModel.Phone" />
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>Notes</label>
+                        <InputTextArea @bind-Value="formModel.Notes" rows="3" />
+                        <ValidationMessage For="() => formModel.Notes" />
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" @onclick="CloseForm">Cancel</button>
+                        <button type="submit" class="btn btn-primary" disabled="@isSubmitting">@(isSubmitting ? "Saving…" : isEditing ? "Save changes" : "Create contact")</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<ContactViewModel> contacts = new();
+    private bool isLoading = true;
+    private bool isSubmitting;
+    private bool isFormOpen;
+    private bool isEditing;
+    private Guid? pendingDeleteContactId;
+    private string? errorMessage;
+    private string? formError;
+    private ContactFormModel formModel = new();
+    private string searchTerm = string.Empty;
+
+    private IEnumerable<ContactViewModel> FilteredContacts => string.IsNullOrWhiteSpace(searchTerm)
+        ? contacts
+        : contacts.Where(contact =>
+                contact.FullName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                (!string.IsNullOrWhiteSpace(contact.Email) && contact.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                (!string.IsNullOrWhiteSpace(contact.Phone) && contact.Phone.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                (!string.IsNullOrWhiteSpace(contact.Notes) && contact.Notes.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+            .OrderBy(contact => contact.FullName);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadContactsAsync();
+    }
+
+    private async Task LoadContactsAsync()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+            var response = await Http.GetFromJsonAsync<List<ContactResponse>>("api/contact");
+            contacts = response?.Select(MapToViewModel).ToList() ?? new List<ContactViewModel>();
+        }
+        catch (Exception)
+        {
+            errorMessage = "Unable to load contacts from the server.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void OpenCreateForm()
+    {
+        isFormOpen = true;
+        isEditing = false;
+        formError = null;
+        formModel = new ContactFormModel();
+    }
+
+    private void OpenEditForm(ContactViewModel contact)
+    {
+        isFormOpen = true;
+        isEditing = true;
+        formError = null;
+        formModel = new ContactFormModel
+        {
+            Id = contact.Id,
+            FirstName = contact.FirstName,
+            LastName = contact.LastName,
+            Email = contact.Email,
+            Phone = contact.Phone,
+            Notes = contact.Notes
+        };
+    }
+
+    private void CloseForm()
+    {
+        isFormOpen = false;
+        isSubmitting = false;
+    }
+
+    private void ConfirmDelete(Guid contactId)
+    {
+        pendingDeleteContactId = contactId;
+    }
+
+    private void CancelDelete(Guid contactId)
+    {
+        if (pendingDeleteContactId == contactId)
+        {
+            pendingDeleteContactId = null;
+        }
+    }
+
+    private async Task DeleteContactAsync(Guid id)
+    {
+        isSubmitting = true;
+        formError = null;
+
+        try
+        {
+            var response = await Http.DeleteAsync($"api/contact/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                contacts = contacts.Where(c => c.Id != id).ToList();
+                pendingDeleteContactId = null;
+            }
+            else
+            {
+                formError = "Unable to delete contact. Please try again.";
+            }
+        }
+        catch (Exception)
+        {
+            formError = "Unable to delete contact. Please try again.";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private async Task SaveContactAsync()
+    {
+        isSubmitting = true;
+        formError = null;
+
+        try
+        {
+            if (isEditing)
+            {
+                var updateRequest = new UpdateContactRequest
+                {
+                    Id = formModel.Id!.Value,
+                    FirstName = formModel.FirstName!,
+                    LastName = formModel.LastName!,
+                    Email = string.IsNullOrWhiteSpace(formModel.Email) ? null : new EmailAddressPayload { Value = formModel.Email },
+                    Phone = formModel.Phone,
+                    Notes = formModel.Notes
+                };
+
+                var response = await Http.PutAsJsonAsync($"api/contact/{updateRequest.Id}", updateRequest);
+                if (response.IsSuccessStatusCode)
+                {
+                    var updated = await response.Content.ReadFromJsonAsync<ContactResponse>();
+                    if (updated is not null)
+                    {
+                        var mapped = MapToViewModel(updated);
+                        var existingIndex = contacts.FindIndex(c => c.Id == mapped.Id);
+                        if (existingIndex >= 0)
+                        {
+                            contacts[existingIndex] = mapped;
+                        }
+                    }
+                    CloseForm();
+                }
+                else
+                {
+                    formError = "Unable to save changes. Check the details and try again.";
+                }
+            }
+            else
+            {
+                var createRequest = new CreateContactRequest
+                {
+                    FirstName = formModel.FirstName!,
+                    LastName = formModel.LastName!,
+                    Email = string.IsNullOrWhiteSpace(formModel.Email) ? null : new EmailAddressPayload { Value = formModel.Email },
+                    Phone = formModel.Phone,
+                    Notes = formModel.Notes
+                };
+
+                var response = await Http.PostAsJsonAsync("api/contact", createRequest);
+                if (response.IsSuccessStatusCode)
+                {
+                    var created = await response.Content.ReadFromJsonAsync<ContactResponse>();
+                    if (created is not null)
+                    {
+                        contacts.Add(MapToViewModel(created));
+                        contacts = contacts
+                            .OrderBy(contact => contact.LastName)
+                            .ThenBy(contact => contact.FirstName)
+                            .ToList();
+                    }
+                    CloseForm();
+                }
+                else
+                {
+                    formError = "Unable to create contact. Check the details and try again.";
+                }
+            }
+        }
+        catch (Exception)
+        {
+            formError = "Something went wrong. Please try again.";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private static ContactViewModel MapToViewModel(ContactResponse contact)
+    {
+        var fullName = $"{contact.FirstName} {contact.LastName}".Trim();
+        var initials = BuildInitials(contact.FirstName, contact.LastName);
+
+        return new ContactViewModel(contact.Id, contact.FirstName, contact.LastName, fullName, contact.Email?.Value, contact.Phone, contact.Notes, initials);
+    }
+
+    private static string BuildInitials(string firstName, string lastName)
+    {
+        var firstInitial = string.IsNullOrWhiteSpace(firstName) ? string.Empty : firstName[0].ToString().ToUpperInvariant();
+        var lastInitial = string.IsNullOrWhiteSpace(lastName) ? string.Empty : lastName[0].ToString().ToUpperInvariant();
+
+        var initials = string.Concat(firstInitial, lastInitial);
+        return string.IsNullOrWhiteSpace(initials) ? "?" : initials;
+    }
+
+    private class ContactResponse
+    {
+        public Guid Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public EmailAddressResponse? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Notes { get; set; }
+    }
+
+    private class EmailAddressResponse
+    {
+        public string? Value { get; set; }
+    }
+
+    private class EmailAddressPayload
+    {
+        public string? Value { get; set; }
+    }
+
+    private class CreateContactRequest
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public EmailAddressPayload? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Notes { get; set; }
+    }
+
+    private class UpdateContactRequest : CreateContactRequest
+    {
+        public Guid Id { get; set; }
+    }
+
+    private class ContactFormModel
+    {
+        public Guid? Id { get; set; }
+
+        [Required(ErrorMessage = "First name is required")]
+        [StringLength(100, ErrorMessage = "First name is too long")]
+        public string? FirstName { get; set; }
+
+        [Required(ErrorMessage = "Last name is required")]
+        [StringLength(100, ErrorMessage = "Last name is too long")]
+        public string? LastName { get; set; }
+
+        [EmailAddress(ErrorMessage = "Please enter a valid email")]
+        public string? Email { get; set; }
+
+        [StringLength(30, ErrorMessage = "Phone number is too long")]
+        public string? Phone { get; set; }
+
+        [StringLength(500, ErrorMessage = "Notes are too long")]
+        public string? Notes { get; set; }
+    }
+
+    private record ContactViewModel(Guid Id, string FirstName, string LastName, string FullName, string? Email, string? Phone, string? Notes, string Initials);
+}
