@@ -228,13 +228,15 @@ public class ContactControllerTest
         CreateContactUseCase? create = null,
         ReadContactUseCase? read = null,
         UpdateContactUseCase? update = null,
-        DeleteContactUseCase? delete = null)
+        DeleteContactUseCase? delete = null,
+        ListContactsUseCase? list = null)
     {
         return new ContactController(
             create ?? new Mock<CreateContactUseCase>(MockBehavior.Default, default!, default!).Object,
             read ?? new Mock<ReadContactUseCase>(MockBehavior.Default, default!).Object,
             update ?? new Mock<UpdateContactUseCase>(MockBehavior.Default, default!, default!).Object,
-            delete ?? new Mock<DeleteContactUseCase>(MockBehavior.Default, default!, default!).Object
+            delete ?? new Mock<DeleteContactUseCase>(MockBehavior.Default, default!, default!).Object,
+            list ?? new Mock<ListContactsUseCase>(MockBehavior.Default, default!).Object
         );
     }
 }

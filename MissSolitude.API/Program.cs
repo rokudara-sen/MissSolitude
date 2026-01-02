@@ -23,6 +23,10 @@ builder.Services.AddInfrastructure();
 
 builder.Services.AddScoped<CreateContactUseCase>();
 builder.Services.AddScoped<ReadContactUseCase>();
+builder.Services.AddScoped<UpdateContactUseCase>();
+builder.Services.AddScoped<DeleteContactUseCase>();
+builder.Services.AddScoped<ListContactsUseCase>();
+
 
 builder.Services.AddScoped<CreateUserUseCase>();
 builder.Services.AddScoped<ReadUserUseCase>();

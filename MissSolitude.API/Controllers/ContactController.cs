@@ -13,13 +13,17 @@ public class ContactController : ControllerBase
     private readonly ReadContactUseCase _readContactUseCase;
     private readonly UpdateContactUseCase _updateContactUseCase;
     private readonly DeleteContactUseCase _deleteContactUseCase;
+    private readonly ListContactsUseCase _listContactsUseCase;
 
-    public ContactController(CreateContactUseCase createContactUseCase, ReadContactUseCase readContactUseCase, UpdateContactUseCase updateContactUseCase, DeleteContactUseCase deleteContactUseCase)
+    public ContactController(CreateContactUseCase createContactUseCase, ReadContactUseCase readContactUseCase,
+        UpdateContactUseCase updateContactUseCase, DeleteContactUseCase deleteContactUseCase,
+        ListContactsUseCase listContactsUseCase)
     {
         _createContactUseCase = createContactUseCase;
         _readContactUseCase = readContactUseCase;
         _updateContactUseCase = updateContactUseCase;
         _deleteContactUseCase = deleteContactUseCase;
+        _listContactsUseCase = listContactsUseCase;
     }
 
     [HttpPost]
@@ -29,7 +33,8 @@ public class ContactController : ControllerBase
         try
         {
             var result = await _createContactUseCase.ExecuteAsync(request, cancellationToken);
-            var contactDto = new ContactDto(result.Id, result.FirstName, result.LastName, result.Email, result.Phone, result.Notes);
+            var contactDto = new ContactDto(result.Id, result.FirstName, result.LastName, result.Email, result.Phone,
+                result.Notes);
             return CreatedAtRoute("GetContactById", new { id = contactDto.Id }, contactDto);
         }
         catch (InvalidOperationException exception)
@@ -44,8 +49,25 @@ public class ContactController : ControllerBase
         try
         {
             var result = await _readContactUseCase.ExecuteAsync(id, cancellationToken);
-            var contactDto = new ContactDto(result.Id, result.FirstName, result.LastName, result.Email, result.Phone, result.Notes);
+            var contactDto = new ContactDto(result.Id, result.FirstName, result.LastName, result.Email, result.Phone,
+                result.Notes);
             return Ok(contactDto);
+        }
+        catch (KeyNotFoundException exception)
+        {
+            return NotFound(exception.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ListContactsAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _listContactsUseCase.ExecuteAsync(cancellationToken);
+            var contacts = result.Select(contact => new ContactDto(contact.Id, contact.FirstName, contact.LastName, contact.Email,
+                contact.Phone, contact.Notes));
+            return Ok(contacts);
         }
         catch (KeyNotFoundException exception)
         {
@@ -63,7 +85,8 @@ public class ContactController : ControllerBase
                 return BadRequest("Body id and route id do not match.");
 
             var result = await _updateContactUseCase.ExecuteAsync(request, cancellationToken);
-            var contactDto = new ContactDto(result.Id, result.FirstName, result.LastName, result.Email, result.Phone, result.Notes);
+            var contactDto = new ContactDto(result.Id, result.FirstName, result.LastName, result.Email, result.Phone,
+                result.Notes);
             return Ok(contactDto);
         }
         catch (KeyNotFoundException exception)
