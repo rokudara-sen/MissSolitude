@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+SLN="MissSolitude.sln"
+if [[ ! -f "$SLN" ]]; then
+  echo "pre-commit: solution not found at $REPO_ROOT/$SLN"
+  exit 1
+fi
+
+if ! command -v dotnet >/dev/null 2>&1; then
+  echo "pre-commit: dotnet not found on PATH"
+  exit 1
+fi
+
+echo "pre-commit: running dotnet format ./$SLN"
+dotnet format "./$SLN" --verbosity minimal
+
+# Re-stage tracked files that were modified by formatting
+git add -u
+
+# If formatting introduced changes that are still not staged, block the commit
+if ! git diff --quiet; then
+  echo "pre-commit: formatting produced unstaged changes. Please stage and commit again."
+  exit 1
+fi
