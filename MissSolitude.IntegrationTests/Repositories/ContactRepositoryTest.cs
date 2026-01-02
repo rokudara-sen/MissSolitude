@@ -195,4 +195,6 @@ public class ContactRepositoryTest : IClassFixture<PostgresFixture>, IAsyncLifet
         var dbContact = await _fixture.Context.Contacts.AsNoTracking().FirstOrDefaultAsync(contactContext => contactContext.Id == contact.Id);
         Assert.Null(dbContact);
     }
+    
+    // TODO: Add tests for listing all contacts
 }

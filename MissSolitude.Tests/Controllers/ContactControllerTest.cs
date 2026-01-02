@@ -239,4 +239,6 @@ public class ContactControllerTest
             list ?? new Mock<ListContactsUseCase>(MockBehavior.Default, default!).Object
         );
     }
+    
+    // TODO: Add tests for listing all contacts
 }
